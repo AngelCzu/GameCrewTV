@@ -1,0 +1,30 @@
+{% extends 'baseInicio.html' %}
+
+{% block head %}
+<link rel="stylesheet" href="#">
+{% endblock %}
+
+{% block content %}
+
+<div class="container">
+    <div class="row justify-content-center mt-3">
+        <div class="col-md-6">
+            <img src="#" class="img-fluid rounded-top mb-3" alt="">
+            <div class="d-grid gap-2 col-6 mx-auto">
+                <a class="btn btn-dark" href="stream">Entrar como profesor</a>
+                <a class="btn btn-info" href="user.html">Entrar como alumno</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
+    crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+
+<script src="https://meet.jit.si/external_api.js"></script>
+<script src="/app/tvapp/static/js/streamer.js"></script>
+
+{% endblock %}

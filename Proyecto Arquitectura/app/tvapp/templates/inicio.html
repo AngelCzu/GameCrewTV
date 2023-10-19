@@ -1,11 +1,19 @@
 {% extends 'baseInicio.html' %}
 
+{% block head %}
+<link rel="stylesheet" href="/app/tvapp/static/css/inicio.css">
+{% endblock %}
+
 {% block content %}
+
+    <div class="container">
+        <h2>Bienvenido a la página de inicio</h2>
+        <p>Este es el contenido de la página de inicio.</p>
+        <p></p>
+        <p></p>
+        <a href="vistaDos">cambiar de vista</a>
+    </div>
     <!-- Contenido específico de la página de inicio -->
-    <h2>Bienvenido a la página de inicio</h2>
-    <p>Este es el contenido de la página de inicio.</p>
-    <p></p>
-    <p></p>
-    <a href="vistaDos">cambiar de vista</a>
+    
     <!-- Puedes agregar contenido específico aquí -->
 {% endblock %}

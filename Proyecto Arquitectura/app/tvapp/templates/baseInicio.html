@@ -1,22 +1,122 @@
-
 <!DOCTYPE html>
-<html>
+<html lang="es">
+
 <head>
-    <!-- Aquí van tus metadatos y estilos comunes -->
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+  <link rel="stylesheet" href="/app/tvapp/static/css/styleNavbar.css">
+  <link rel="icon" href="/app/tvapp/static/img/logo_transparent.png">
+
+  {% block head %}
+  {% endblock %}
 </head>
 <body>
-    <!-- Encabezado común u otros elementos comunes -->
-    <header>
-        <h1>Mi Sitio Web</h1>
-    </header>
+    <!-- Inicio Navbar lateral -->
 
-    <!-- Contenido específico de cada página se incluirá aquí -->
+  <nav class="sidebar close">
+    <header>
+        <div class="image-text">
+            <span class="image">
+                <img id="plant" src="/app/tvapp/static/img/logo_transparent.png" alt="">
+            </span>
+
+            <div class="text logo-text ms-3">
+                <span class="name"></span>
+                <span class="profession">Game Crew TV</span>
+            </div>
+        </div>
+
+<i class="bi bi-chevron-right toggle"></i>
+    </header>
+    
+    <div class="menu-bar">
+        <div class="menu">
+         
+        
+
+            <li class="search-box">
+                <i id="icon" class="bi bi-search"></i>
+                <input type="text" placeholder="Buscar...">
+            </li>
+
+            
+                <li class="nav-link">
+                    <a class="" href="inicio.html">
+                        <i id="icon" class="bi bi-house-door"></i>
+                        <span class="text nav-text">Inicio</span>
+                    </a>
+                </li>
+
+                <li class="nav-link">
+                    <a href="#">
+                      <i id="icon" class="bi bi-tag"></i>
+                        <span class="text nav-text">Categorias</span>
+                    </a>
+                </li>
+
+                
+
+                <li class="nav-item">
+                    <a href="perfil">
+                        <i id="icon" class="bi bi-inbox"></i>
+                        <span class="text nav-text">Notificaciones</span>
+                    </a>
+                </li>
+                
+
+            
+        </div>
+
+        <div class="bottom-content">
+            <li class="">
+                <a href="login">
+                  <i id="icon" class="bi bi-person"></i>
+                    <span class="text nav-text">Inicio Sesión</span>
+                </a>
+            </li>
+
+            <li class="mode">
+                <div class="sun-moon">
+                  <i id="icon_luna" class="bi bi-moon"></i>
+                  <i id="icon_sol" class="bi bi-brightness-high"></i>
+                </div>
+                <span class="mode-text text">Modo oscuro</span>
+
+                <div class="toggle-switch">
+                    <span class="switch"></span>
+                </div>
+            </li>
+            
+        </div>
+    </div>
+  </nav>
+  <!-- Fin Navbar lateral -->
+  <section class="home">
     {% block content %}
     {% endblock %}
+  </section>
+    <!-- Contenido específico de cada página se incluirá aquí -->
+    
 
-    <!-- Pie de página común u otros elementos comunes -->
-    <footer>
-        <p>Derechos de autor © 2023 Mi Sitio Web</p>
-    </footer>
+ 
 </body>
+
+<!-- BOOSTRAP: -->
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js"
+  integrity="sha384-zYPOMqeu1DAVkHiLqWBUTcbYfZ8osu1Nd6Z89ify25QV9guujx43ITvfi12/QExE" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.min.js"
+  integrity="sha384-Y4oOpwW3duJdCWv5ly8SCFYWqFDsfob/3GkgExXKV4idmbt98QcxXYs9UoXAB7BZ" crossorigin="anonymous"></script>
+<!-- ICONS -->
+<script type="module" src="https://unpkg.com/ionicons@7.1.0/dist/ionicons/ionicons.esm.js"></script>
+<script src="https://unpkg.com/boxicons@2.1.4/dist/boxicons.js"></script>
+<!-- JS -->
+
+<script src="/app/tvapp/static/js/navbar.js"></script>
+
 </html>
