@@ -6,6 +6,7 @@ urlpatterns = [
     path('login',views.login),  # ([Nombre Vista], views.[Nombre de la funcion en views.py])
     path('inicio', views.inicio),
     path('perfil', views.perfil), 
-    path('stream', views.stream) 
+    path('stream', views.stream),
+    path('formuSala', views.sala_form, name='sala_form'),
 
 ]
