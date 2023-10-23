@@ -3,7 +3,10 @@ from .models import *
 
 
 def inicio(request):
-    return render(request, 'inicio.html')
+    salas =  Sala.objects.all()
+
+    salas_nombreSala = Sala.objects.filter(nombreSala = 2)
+    return render(request, 'inicio.html', {"nomSala":salas, "nom_Sala":salas_nombreSala})
 
 def login(request):
     return render(request, 'login.html')
