@@ -3,7 +3,7 @@ from . import views
 
 urlpatterns = [
     path('', views.inicio), 
-    path('login',views.login),  # ([Nombre Vista], views.[Nombre de la funcion en views.py])
+    path('login_registro',views.login_registro),  # ([Nombre Vista], views.[Nombre de la funcion en views.py])
     path('inicio', views.inicio),
     path('perfil', views.perfil), 
     path('streamStramer', views.streamStramer),

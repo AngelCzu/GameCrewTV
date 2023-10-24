@@ -25,7 +25,17 @@
 
         <!-- REGISTRO Y SUS COMPONENTES -->
             <div class="registro" id="contenedorReg">
-                <form id="formLogin">
+                <form id="formLogin" action="" method="POST">
+                    {% csrf_token %}
+
+                    {% if error %}
+                    <small class="text-danger" style="justify-content: center; display: flex;" id="usuario-error">{{error}}</small>
+                    {% endif %}
+
+
+                    
+
+
                     <label for="chk" id="txtLabelReg" aria-hidden="true">Ingresar</label>
 
                         <label for="txtUsuIng"  class="form-label" id="labelTxtUsuIng"><i class="bi bi-person-fill me-1"></i>Usuario</label>
@@ -49,7 +59,8 @@
 
             <!-- LOGIN Y SUS COMPONENTES -->
             <div class="login" id="contenedorIng"> 
-                <form id="formReg">
+                <form id="formReg" action="" method="POST">
+                    {% csrf_token %}
                     <label for="chk" id="txtLabelIng" aria-hidden="true">Registrarse</label>
 
                     <label for="txtNomUsuReg" class="form-label" id="labelTxtNomUsu"><i class="bi bi-person-fill me-1"></i>Nombre de Usuario</label>

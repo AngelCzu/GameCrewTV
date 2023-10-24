@@ -53,25 +53,28 @@
                         <span class="text nav-text">Inicio</span>
                     </a>
                 </li>
-            
-                <li class="nav-item">
-                    <a href="perfil">
-                        <i id="icon" class="bi bi-inbox"></i>
-                        <span class="text nav-text">Notificaciones</span>
-                    </a>
-                </li>
+
                 
 
             
         </div>
 
         <div class="bottom-content">
-            <li class="">
-                <a href="login">
+          <li class="">
+              {% if user.is_authenticated %}
+                <a href="perfil">
                   <i id="icon" class="bi bi-person"></i>
-                    <span class="text nav-text">Inicio Sesión</span>
+                  <span class="text nav-text">¡Hola, {{ user.username }}!</span>
                 </a>
-            </li>
+                  
+              {% else %}
+                  <a href="login_registro">
+                      <i id="icon" class="bi bi-person"></i>
+                      <span class="text nav-text">Inicio Sesión</span>
+                  </a>
+              {% endif %}
+          </li>
+      
 
             <li class="mode">
                 <div class="sun-moon">
