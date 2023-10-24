@@ -1,5 +1,7 @@
 {% extends 'baseInicio.html' %}
 
+{% load static %}
+
 {% block head %}
 <link rel="stylesheet" href="#">
 {% endblock %}
@@ -17,5 +19,5 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
 
 <script src="https://meet.jit.si/external_api.js"></script>
-<script src="/app/tvapp/static/js/streamer.js"></script>
+<script src="{% static 'js/streamer.js' %}"></script>
 {% endblock %}

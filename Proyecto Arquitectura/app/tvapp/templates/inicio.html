@@ -11,67 +11,10 @@
         <p>Este es el contenido de la página de inicio.</p>
         <p></p>
         <p></p>
-        <a href="vistaDos">cambiar de vista</a>
         <a href="formuSala">cambiar de vista</a>
 
     </div>
-    <!-- Contenido específico de la página de inicio -->
-    <div id="carouselExampleCaptions" class="carousel slide">
-        <div class="carousel-indicators">
-            <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
-            <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="1" aria-label="Slide 2"></button>
-            <button type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide-to="2" aria-label="Slide 3"></button>
-        </div>
-        <div class="carousel-inner">
-            <div class="carousel-item active">
-                <div class="card" style="max-width: 18rem; margin: 0 auto;">
-                    <div class="card-body">
-                        <h5 class="card-title">Card title</h5>
-                        <img src="static/img/ibai.jpg" class="card-img-top" alt="...">
-                        <div class="carousel-caption d-none d-md-block">
-                            <h5>First slide label</h5>
-                            <p>Some representative placeholder content for the first slide.</p>
-                        </div>
-                        <a href="#" class="card-link">Card link</a>
-                    </div>
-                </div>
-            </div>
-            <div class="carousel-item">
-                <div class="card" style="max-width: 18rem; margin: 0 auto;">
-                    <div class="card-body">
-                        <h5 class="card-title">Card title</h5>
-                        <img src="static/img/auron.jpg" class="card-img-top" alt="...">
-                        <div class="carousel-caption d-none d-md-block">
-                            <h5>First slide label</h5>
-                            <p>Some representative placeholder content for the first slide.</p>
-                        </div>
-                        <a href="#" class="card-link">Card link</a>
-                    </div>
-                </div>
-            </div>
-            <div class="carousel-item">
-                <div class="card" style="max-width: 18rem; margin: 0 auto;">
-                    <div class="card-body">
-                        <h5 class="card-title">Card title</h5>
-                        <img src="static/img/rakyz.jpg" class="card-img-top" alt="...">
-                        <div class="carousel-caption d-none d-md-block">
-                            <h5>First slide label</h5>
-                            <p>Some representative placeholder content for the first slide.</p>
-                        </div>
-                        <a href="#" class="card-link">Card link</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
-            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Previous</span>
-        </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
-            <span class="carousel-control-next-icon" aria-hidden="true"></span>
-            <span class="visually-hidden">Next</span>
-        </button>
-    </div>
+
     <!-- canales -->
     <br>
     <div class="container">
@@ -79,50 +22,23 @@
 
             {% for s in nomSala %}
             <div class="col-md-3">
-                <div class="card" style="width: 18rem;">
-                <img src="static/img/ibai.jpg" class="card-img-top custom-card-img" alt="...">
-                <div class="card-body">
-                    <p class="card-text">{{s.nombreSala}}</p>
-                </div>
-                </div>
+                <a href="streamViewer" >
+                    <div class="card" style="width: 18rem;">
+                    
+                        <img src="static/img/ibai.jpg" class="card-img-top custom-card-img" alt="...">
+                        <div class="card_body">
+                            <p class="card-text" data-nombre-sala="{{ s.nombreSala }}">{{ s.nombreSala }}</p>
+                        </div>
+                    
+                    </div>
+                </a>
             </div>
-            {% endfor %}
-        <div class="col-md-3">
-            <div class="card" style="width: 18rem;">
-            <img src="static/img/ibai.jpg" class="card-img-top custom-card-img" alt="...">
-            <div class="card-body">
-                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-            </div>
-            </div>
-        </div>
-    
-        <div class="col-md-3">
-            <div class="card" style="width: 18rem;">
-            <img src="static/img/mrbeast.jpg" class="card-img-top custom-card-img" alt="...">
-            <div class="card-body">
-                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-            </div>
-            </div>
-        </div>
-    
-        <div class="col-md-3">
-            <div class="card" style="width: 18rem;">
-            <img src="static/img/auron.jpg" class="card-img-top custom-card-img" alt="...">
-            <div class="card-body">
-                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-            </div>
-            </div>
-        </div>
-    
-        <div class="col-md-3">
-            <div class="card" style="width: 18rem;">
-            <img src="static/img/rakyz.jpg" class="card-img-top custom-card-img" alt="...">
-            <div class="card-body">
-                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-            </div>
-            </div>
-        </div>
-        </div>
+             {% endfor %}
+
+        
     </div>
     <!-- Puedes agregar contenido específico aquí -->
+    <script src="{% static 'js/streamInicio.js' %}"></script>
+
+
 {% endblock %}
