@@ -1,12 +1,12 @@
 
 
 :root{
-    --body-color: #aeb6cb;
-    --sidebar-color: #2d6b6c;
-    --primary-color: #232424;
-    --primary-color-light: #f0f0f1;
-    --toggle-color: #b4adad;
-    --text-color: #444343;
+    --body-color:#1f1b41;
+    --sidebar-color: #363269;
+    --primary-color: #1c4ebc;
+    --primary-color-light: #1f4bb0;
+    --toggle-color: #f0ebeb;
+    --text-color: #fcfcfc;
 
     --shark-50: #f6f7f9;
     --shark-100: #eceef2;
@@ -30,7 +30,7 @@
 
 body{
     min-height: 100vh;
-    background-color: linear-gradient(319deg, rgba(0,167,203,1) 0%, rgba(255,255,255,1) 100%);
+    background-color: var(--body-color);
     transition: var(--tran-05);
 }
 
