@@ -1,3 +1,19 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 {% extends 'baseInicio.html' %}
 
 {% load static %}
@@ -8,32 +24,36 @@
 {% endblock %}
 
 {% block content %}
-<div class="row">
-    <div class="col-md-12">
-      <div id="meet"></div>
 
-
-      <title>Chat de Twitch</title>
-    <div id="chat-container">
-        <div id="chat"></div>
+<div class="row" >
+    <div class="col-md-6 m-6" >
+        <div id="meet"></div>
+        <title>Chat de Twitch</title>
     </div>
-    <input type="text" id="input" placeholder="Escribe un mensaje...">
-    <button onclick="sendMessage()">Enviar</button>
-    <input type="checkbox" id="destacar"> Destacar mensaje
-    <br>
-    <span class="puntos-container">Puntos: <span id="puntos">0</span></span>
-    <button id="seguir-btn">Seguir</button>
+    <div class="col-md-6">
+        <div id="chat-container">
+            <div id="chat"></div>
+            <input type="text" id="input" placeholder="Escribe un mensaje...">
+            <button onclick="sendMessage()">Enviar</button>
+            <input type="checkbox" id="destacar"> Destacar mensaje
+            <br>
+            <span class="puntos-container">Puntos: <span id="puntos">0</span></span>
+            <button id="seguir-btn">Seguir</button>
+            <select id="sticker-dropdown">
+                <option value="" selected>Selecciona un Sticker</option>
+                <option value="logo">Sticker 1</option>
+                <option value="logo_transparent">Sticker 2</option>
+                <!-- Agrega más opciones de stickers aquí -->
+            </select>
+        </div>
+    </div>
+    
+</div>
 
-    <select id="sticker-dropdown">
-        <option value="" selected>Selecciona un Sticker</option>
-        <option value="logo">Sticker 1</option>
-        <option value="logo_transparent">Sticker 2</option>
-        <!-- Agrega más opciones de stickers aquí -->
-    </select>
-
-    <script>
-        // Simulación de mensajes de chat (para fines de demostración)
-        const messages = [
+<script>
+    // Tu código JavaScript aquí
+     // Simulación de mensajes de chat (para fines de demostración)
+     const messages = [
             "Usuario1: Hola, ¿cómo están?",
             "Usuario2: ¡Hola! Estamos bien, gracias.",
             "Usuario1: ¿Alguien ha visto esa nueva película?",
@@ -133,13 +153,9 @@ function guardarPuntos(cantidad) {
         }
 
         displayMessages();
-    </script>
+</script>
 
-
-    </div>
-  </div>
-
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
     crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>

@@ -27,3 +27,7 @@ img{
     height: 25px;
     width: 25px;
 }
+
+.row{
+    padding-right: 100px;
+}
