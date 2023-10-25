@@ -1,24 +1,12 @@
 
 
 :root{
-    --body-color:#1f1b41;
-    --sidebar-color: #363269;
-    --primary-color: #1c4ebc;
-    --primary-color-light: #1f4bb0;
-    --toggle-color: #f0ebeb;
-    --text-color: #fcfcfc;
-
-    --shark-50: #f6f7f9;
-    --shark-100: #eceef2;
-    --shark-200: #d4d8e3;
-    --shark-300: #aeb6cb;
-    --shark-400: #8390ad;
-    --shark-500: #637394;
-    --shark-600: #4f5b7a;
-    --shark-700: #404a64;
-    --shark-800: #384054;
-    --shark-900: #323848;
-    --shark-950: #1e212b;
+    --body-color: #e0e0e0; /* Color del fondo del cuerpo de la página (gris claro) */
+    --sidebar-color: #b0b0b0; /* Color de la barra lateral (gris más oscuro) */
+    --primary-color: #ff5722; /* Color primario (naranja brillante) */
+    --primary-color-light: #ff914d; /* Tono claro del color primario (naranja claro) */
+    --toggle-color: #e0e0e0; /* Color del interruptor o botón de alternancia (gris claro) */
+    --text-color: #333333; /* Color del texto principal (gris oscuro) */
 
 
 
@@ -42,8 +30,8 @@ body{
 body.dark{
     --body-color: #18191a;
     --sidebar-color: #242526;
-    --primary-color: #3a3b3c;
-    --primary-color-light: #3a3b3c;
+    --primary-color: #ff5722;
+    --primary-color-light: #ff914d;
     --toggle-color: #fff;
     --text-color: #ccc;
 }

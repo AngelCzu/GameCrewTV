@@ -2,6 +2,7 @@ from django.shortcuts import redirect, render
 from .models import *
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login
+from django.contrib.auth.decorators import login_required
 
 def inicio(request):
     salas =  Sala.objects.all()
@@ -40,8 +41,11 @@ def login_registro(request):
     return render(request, 'login.html', context)
 
     
-
+@login_required
 def perfil(request):
+    usuario_actual = request.user
+    username = usuario_actual.username
+    email = usuario_actual.email
     return render(request, 'perfil.html')
     
 def streamStramer(request):
