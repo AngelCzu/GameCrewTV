@@ -1,8 +1,22 @@
+import time
 from django.shortcuts import redirect, render
 from .models import *
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
+import threading
+
+def agregar_puntos(usuario, cantidad):
+    perfil, creado = Puntos.objects.get_or_create(usuario=usuario)
+    perfil.puntos += cantidad
+    perfil.save()
+
+def agregar_puntos_periodicamente(usuario):
+    while True:
+        agregar_puntos(usuario, 10)
+        time.sleep(60)
+
+
 
 def inicio(request):
     salas =  Sala.objects.all()
@@ -46,7 +60,8 @@ def perfil(request):
     usuario_actual = request.user
     username = usuario_actual.username
     email = usuario_actual.email
-    return render(request, 'perfil.html')
+    puntos_usuario = Puntos.objects.get(usuario=request.user)
+    return render(request, 'perfil.html', {'puntos_usuario': puntos_usuario})
     
 def streamStramer(request):
     return render(request, 'streamStramer.html')
@@ -61,6 +76,13 @@ def sala_form(request):
 
 
 def streamViewer(request):
+    usuario_actual = request.user
+
+    # Comenzar un hilo para agregar puntos en segundo plano
+    puntos_thread = threading.Thread(target=agregar_puntos_periodicamente, args=(usuario_actual,))
+    puntos_thread.daemon = True  # El hilo se detendrá cuando el programa principal se cierre
+    puntos_thread.start()
+
     return render(request, 'streamViewer.html')
 
 

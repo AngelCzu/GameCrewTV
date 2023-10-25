@@ -8,4 +8,7 @@ class Sala(models.Model):
     def str(self):
         txt = "ID: {0}"
         return txt.format(self.nombreSala)
-    
+
+class Puntos(models.Model):
+    usuario = models.OneToOneField(User, on_delete=models.CASCADE)
+    puntos = models.IntegerField(default=0)
