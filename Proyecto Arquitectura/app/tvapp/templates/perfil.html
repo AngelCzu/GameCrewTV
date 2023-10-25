@@ -12,12 +12,10 @@
     <h1>Mi Perfil</h1>
 </header>
 <div class="profile">
-    <div class="avatar">
-        <img src="avatar.jpg" alt="Mi Avatar">
-    </div>
+    
     <div class="user-info">
-        <h2>Nombre de Usuario: {{ user.username }}</h2>
-        <p>Correo Electrónico: {{ user.email }}</p>
+        <h2>{{ user.username }}</h2>
+        <p>{{ user.email }}</p>
         <p>Gaming Coins (GC): {{ puntos_usuario.puntos }}</p>
     </div>
 </div>
@@ -26,7 +24,7 @@
         <div class="col-md-6">
             <img src="#" class="img-fluid rounded-top mb-3" alt="">
             <div class="d-grid gap-2 col-6 mx-auto">
-                <a class="btn btn-dark" href="formuSala">Generar Stream</a>
+                <button class="btn btn-dark" href="formuSala">Generar Stream</button>
 
             </div>
         </div>
@@ -34,8 +32,10 @@
 </div>
 
 <footer>
-    <a href="editar_perfil.html">Editar Perfil</a>
-    <a href="cerrar_sesion.html">Cerrar Sesión</a>
+    <footer>
+        <a href="editar_perfil.html">Editar Perfil</a>
+        <a href="{% url 'logout' %}">Cerrar Sesión</a>
+    </footer>
 </footer>
 
 

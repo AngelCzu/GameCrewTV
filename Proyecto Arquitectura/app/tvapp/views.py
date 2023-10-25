@@ -2,7 +2,7 @@ import time
 from django.shortcuts import redirect, render
 from .models import *
 from django.contrib.auth.models import User
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 import threading
 
@@ -49,6 +49,7 @@ def login_registro(request):
             # Crea un nuevo usuario
             user = User.objects.create_user(username=nombre_usuario, email=correo, password=contraseña)
             login(request, user)
+            agregar_puntos(user, 10)
             # Usuario registrado con éxito, puedes redirigirlo al inicio u otra página.
             return redirect('/inicio')
     # Renderiza la plantilla con el contexto, ya sea que el usuario se autentique o no.
@@ -57,6 +58,11 @@ def login_registro(request):
     
 @login_required
 def perfil(request):
+    if request.method == 'POST' and 'logout' in request.POST:
+        # Si se envía una solicitud POST con el nombre 'logout', entonces realiza el logout.
+        logout(request)
+        return redirect('inicio')  # Redirige al usuario a la página de inicio.
+
     usuario_actual = request.user
     username = usuario_actual.username
     email = usuario_actual.email
@@ -82,6 +88,7 @@ def streamViewer(request):
     puntos_thread = threading.Thread(target=agregar_puntos_periodicamente, args=(usuario_actual,))
     puntos_thread.daemon = True  # El hilo se detendrá cuando el programa principal se cierre
     puntos_thread.start()
+    puntos_usuario = Puntos.objects.get(usuario=request.user)
 
     return render(request, 'streamViewer.html')
 

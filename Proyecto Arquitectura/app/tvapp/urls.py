@@ -1,4 +1,5 @@
 from django.urls import path
+from django.contrib.auth.views import LogoutView
 from . import views
 
 urlpatterns = [
@@ -8,6 +9,7 @@ urlpatterns = [
     path('perfil', views.perfil), 
     path('streamStramer', views.streamStramer),
     path('formuSala', views.sala_form),
-    path('streamViewer', views.streamViewer)
+    path('streamViewer', views.streamViewer),
+    path('logout/', LogoutView.as_view(), name='logout'),
 
 ]
