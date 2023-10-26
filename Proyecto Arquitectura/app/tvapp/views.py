@@ -68,6 +68,24 @@ def perfil(request):
     email = usuario_actual.email
     puntos_usuario = Puntos.objects.get(usuario=request.user)
     return render(request, 'perfil.html', {'puntos_usuario': puntos_usuario})
+
+@login_required
+def editar_perfil(request):
+    if request.method == 'POST':
+        # Obtiene los datos del formulario
+        username = request.POST.get('username')
+        email = request.POST.get('email')
+
+        # Actualiza los datos del usuario
+        user = request.user
+        user.username = username
+        user.email = email
+        user.save()
+
+        # Redirige de vuelta al perfil
+        return redirect('perfil')
+
+    return render(request, 'editar_perfil.html')
     
 def streamStramer(request):
     return render(request, 'streamStramer.html')

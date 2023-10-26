@@ -1,0 +1,31 @@
+{% extends 'baseInicio.html' %}
+
+{% load static %}
+
+{% block head %}
+<link rel="stylesheet" type="text/css" href="{% static 'css/StylePerfil.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<header class="headerPerfil">
+    <h1>Editar Perfil</h1>
+</header>
+<div class="profile">
+    <form method="post" action="{% url 'editar_perfil' %}">
+        {% csrf_token %}
+        <div class="user-info">
+            <label for="username">Nombre de Usuario:</label>
+            <input type="text" name="username" value="{{ user.username }}" required>
+            <label for="email">Correo Electrónico:</label>
+            <input type="email" name="email" value="{{ user.email }}" required>
+            <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+        </div>
+    </form>
+</div>
+
+<footer>
+    <a href="{% url 'perfil' %}">Volver a Mi Perfil</a>
+</footer>
+
+{% endblock %}
