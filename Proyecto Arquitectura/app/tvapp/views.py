@@ -80,7 +80,7 @@ def sala_form(request):
         return redirect('/streamStramer')
     return render(request, 'formuSala.html')
 
-
+@login_required
 def streamViewer(request):
     usuario_actual = request.user
 
@@ -90,7 +90,7 @@ def streamViewer(request):
     puntos_thread.start()
     puntos_usuario = Puntos.objects.get(usuario=request.user)
 
-    return render(request, 'streamViewer.html')
+    return render(request, 'streamViewer.html', {'puntos_usuario': puntos_usuario})
 
 
 

@@ -3,15 +3,32 @@
 {% load static %}
 
 {% block head %}
-<link rel="stylesheet" href="#">
+<link rel="stylesheet" href="{% static 'css/chat.css' %}">
 {% endblock %}
 
 {% block content %}
 <div class="row">
-    <div class="col-md-12">
+  <div class="col-md-6 m-6" >
       <div id="meet"></div>
-    </div>
   </div>
+  <div class="col-md-6">
+      <div id="chat-container">
+          <div id="chat"></div>
+          <input type="text" id="input" placeholder="Escribe un mensaje...">
+          <button onclick="sendMessage()">Enviar</button>
+          <input type="checkbox" id="destacar"> Destacar mensaje
+          <br>
+          <span class="puntos-container">Puntos: <span id="puntos">{{ puntos_usuario.puntos }}</span></span>
+          <button id="seguir-btn">Seguir</button>
+          <select id="sticker-dropdown">
+              <option value="" selected>Selecciona un Sticker</option>
+              <option value="logo">Sticker 1</option>
+              <option value="logo_transparent">Sticker 2</option>
+              <!-- Agrega más opciones de stickers aquí -->
+          </select>
+      </div>
+  </div>
+</div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
@@ -20,4 +37,5 @@
 
 <script src="https://meet.jit.si/external_api.js"></script>
 <script src="{% static 'js/viewer.js' %}"></script>
+<script src="{% static 'js/chat.js' %}"></script>
 {% endblock %}

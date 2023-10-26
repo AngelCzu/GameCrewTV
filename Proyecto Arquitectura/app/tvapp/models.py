@@ -5,8 +5,8 @@ from django.contrib.auth.models import User
 class Sala(models.Model):
     nombreSala = models.CharField(max_length=100)  # Puedes ajustar la longitud máxima según tus necesidades
 
-    def str(self):
-        txt = "ID: {0}"
+    def __str__(self):
+        txt = "nombresala: {0}"
         return txt.format(self.nombreSala)
 
 class Puntos(models.Model):

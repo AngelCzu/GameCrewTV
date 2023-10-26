@@ -31,7 +31,7 @@ return;
 
 if (selectedSticker) {
 // Si se ha seleccionado un sticker, envíalo junto con el mensaje
-const stickerHTML = `<img src="/app/tvapp/static/img/${selectedSticker}.png" alt="${selectedSticker}" />`;
+const stickerHTML = `<img src="/static/img/${selectedSticker}.png" alt="${selectedSticker}" />`;
 const messageWithSticker = message + ' ' + stickerHTML;
 
 if (destacarCheckbox.checked) {
