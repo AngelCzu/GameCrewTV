@@ -4,12 +4,7 @@ const messages = [
     "Usuario1: ¿Alguien ha visto esa nueva película?",
 ];
 
-// Función para mostrar la cantidad de puntos en el elemento "puntos"
-function mostrarPuntos() {
-    const puntosSpan = document.getElementById("puntos");
-    const puntosActuales = parseInt(localStorage.getItem('puntos')) || 0;
-    puntosSpan.textContent = puntosActuales;
-}
+
 
 function displayMessages() {
     const chatDiv = document.getElementById("chat");
@@ -59,24 +54,24 @@ input.value = "";
 displayMessages();
 }
 
-function guardarPuntos(cantidad) {
-// Obtener la cantidad de puntos actual del Local Storage o establecerla en 0 si es la primera vez
-let puntosActuales = parseInt(localStorage.getItem('puntos')) || 0;
 
-// Calcular la nueva cantidad de puntos
-const nuevaCantidad = puntosActuales + cantidad;
-
-if (nuevaCantidad < 100) {
-// Si no hay suficientes puntos, deshabilitar la casilla de verificación
-document.getElementById('destacar').disabled = true;
+const puntosSpan = document.querySelector(".puntos-container");
+if (puntosSpan) {
+  const puntosTexto = puntosSpan.textContent.trim(); // Obtén el texto dentro del elemento
+  const puntosUsuario = parseInt(puntosTexto.split(":")[1].trim()); // Extrae el número de puntos
+  console.log(puntosUsuario); // Muestra el número de puntos en la consola
+} else {
+  console.log("Elemento no encontrado");
 }
+
+
 
 if (nuevaCantidad >= 0) {
 // Guardar la nueva cantidad de puntos (evitando valores negativos)
 localStorage.setItem('puntos', nuevaCantidad.toString());
 mostrarPuntos(); // Actualizar la visualización de los puntos
 }
-}
+
 
 
 // Función para manejar el clic del botón "Seguir"
