@@ -46,15 +46,14 @@ class CompraSolespeForm(forms.Form):
 
     def clean(self):
         cleaned_data = super().clean()
+        # Validar la tarjeta en la base de datos
         numero_tarjeta = cleaned_data.get('numero_tarjeta')
         fecha_vencimiento = cleaned_data.get('fecha_vencimiento')
         codigo_seguridad = cleaned_data.get('codigo_seguridad')
 
-        # Validar la tarjeta en la base de datos
         try:
             tarjeta = Tarjeta.objects.get(numeroTarjeta=numero_tarjeta, fechaVencimiento=fecha_vencimiento, codigoSeguridad=codigo_seguridad)
         except Tarjeta.DoesNotExist:
-            # La tarjeta no existe en la base de datos
             raise forms.ValidationError("La tarjeta no existe en la base de datos.")
 
         # Restar el dinero de la tarjeta
@@ -67,5 +66,10 @@ class CompraSolespeForm(forms.Form):
         # Restar el costo de la compra al dinero de la tarjeta
         tarjeta.dinero -= costo_en_dinero
         tarjeta.save()
+
+        # Actualizar la cantidad de Solespe del usuario
+        usuario_solespe, creado = Solespe.objects.get_or_create(usuario=tarjeta.usuario)
+        usuario_solespe.cantidadSolespe += cantidad_solespe
+        usuario_solespe.save()
 
         return cleaned_data

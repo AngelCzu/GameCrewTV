@@ -106,6 +106,12 @@ def streamViewer(request):
 
     return render(request, 'streamViewer.html', {'puntos_usuario': puntos_usuario})
 
+def agregar_solespe(usuario, cantidad_solespe):
+    # Obtener o crear el objeto Solespe asociado al usuario
+    usuario_solespe, creado = Solespe.objects.get_or_create(usuario=usuario)
+    usuario_solespe.cantidadSolespe += cantidad_solespe
+    usuario_solespe.save()
+
 def comprar_solespe(request):
     if request.method == 'POST':
         form = CompraSolespeForm(request.POST)
@@ -131,8 +137,8 @@ def comprar_solespe(request):
             tarjeta.dinero -= costo_en_dinero
             tarjeta.save()
 
-            # Puedes agregar puntos u otras acciones aquí
-            agregar_puntos(request.user, cantidad_solespe)
+            # Agregar Solespe al usuario
+            agregar_solespe(request.user, cantidad_solespe)
 
             messages.success(request, f'Se han comprado {cantidad_solespe} Solespe con éxito.')
             return redirect('inicio')
