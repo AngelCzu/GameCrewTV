@@ -39,6 +39,11 @@ class Solespe(models.Model):
         return txt.format(self.usuario.username, self.cantidadSolespe)
 
 
+# tvapp/models.py
+# tvapp/forms.py
+from django import forms
+from .models import Tarjeta
+
 class CompraSolespeForm(forms.Form):
     cantidad_solespe = forms.IntegerField(min_value=1, label='Cantidad de Solespe a comprar')
     numero_tarjeta = forms.CharField(max_length=16, label='Número de Tarjeta')
@@ -58,9 +63,6 @@ class CompraSolespeForm(forms.Form):
             # La tarjeta no existe en la base de datos
             raise forms.ValidationError("La tarjeta no existe en la base de datos.")
 
-        # Puedes agregar un mensaje que se mostrará en la página
-        messages.warning(self.request, "¡La tarjeta existe!")
-
         # Restar el dinero de la tarjeta
         cantidad_solespe = cleaned_data.get('cantidad_solespe')
         costo_en_dinero = cantidad_solespe * 100  # 100 es el valor de cada Solespe
@@ -73,3 +75,4 @@ class CompraSolespeForm(forms.Form):
         tarjeta.save()
 
         return cleaned_data
+

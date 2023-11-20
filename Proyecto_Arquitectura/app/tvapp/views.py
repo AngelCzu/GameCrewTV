@@ -4,6 +4,7 @@ from .models import *
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 import threading
 
 def agregar_puntos(usuario, cantidad):
@@ -68,6 +69,18 @@ def perfil(request):
     email = usuario_actual.email
     puntos_usuario = Puntos.objects.get(usuario=request.user)
     return render(request, 'perfil.html', {'puntos_usuario': puntos_usuario})
+
+@login_required
+def editar_perfil(request):
+    if request.method == 'POST' and 'logout' in request.POST:
+        # Si se envía una solicitud POST con el nombre 'logout', entonces realiza el logout.
+        logout(request)
+        return redirect('inicio')  # Redirige al usuario a la página de inicio.
+
+    usuario_actual = request.user
+    username = usuario_actual.username
+    email = usuario_actual.email
+    return render(request, 'editar_perfil.html')
     
 def streamStramer(request):
     return render(request, 'streamStramer.html')
@@ -92,10 +105,39 @@ def streamViewer(request):
 
     return render(request, 'streamViewer.html', {'puntos_usuario': puntos_usuario})
 
-
 def comprar_solespe(request):
-    return render(request, 'comprar_solespe.html')
+    if request.method == 'POST':
+        form = CompraSolespeForm(request.POST)
+        if form.is_valid():
+            cantidad_solespe = form.cleaned_data['cantidad_solespe']
+            numero_tarjeta = form.cleaned_data['numero_tarjeta']
+            fecha_vencimiento = form.cleaned_data['fecha_vencimiento']
+            codigo_seguridad = form.cleaned_data['codigo_seguridad']
 
+            try:
+                tarjeta = Tarjeta.objects.get(numeroTarjeta=numero_tarjeta, fechaVencimiento=fecha_vencimiento, codigoSeguridad=codigo_seguridad)
+            except Tarjeta.DoesNotExist:
+                messages.error(request, "La tarjeta no existe en la base de datos.")
+                return redirect('comprar_solespe')
 
+            costo_en_dinero = cantidad_solespe * 100  # 100 es el valor de cada Solespe
+
+            if tarjeta.dinero < costo_en_dinero:
+                messages.error(request, "Fondos insuficientes en la tarjeta.")
+                return redirect('comprar_solespe')
+
+            # Restar el costo de la compra al dinero de la tarjeta
+            tarjeta.dinero -= costo_en_dinero
+            tarjeta.save()
+
+            # Puedes agregar puntos u otras acciones aquí
+            agregar_puntos(request.user, cantidad_solespe)
+
+            messages.success(request, f'Se han comprado {cantidad_solespe} Solespe con éxito.')
+            return redirect('inicio')
+    else:
+        form = CompraSolespeForm()
+
+    return render(request, 'comprar_solespe.html', {'form': form})
 
 

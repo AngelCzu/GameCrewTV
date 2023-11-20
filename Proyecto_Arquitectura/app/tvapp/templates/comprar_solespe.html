@@ -1,36 +1,19 @@
 {% extends 'baseInicio.html' %}
 {% load static %}
 {% block head %}
-<link rel="stylesheet" href="{% static 'css/inicio.css' %}">
 <link rel="stylesheet" href="{% static 'css/tarjeta.css' %}">
 {% endblock %}
 
-
 {% block content %}
-<form>
-    {% csrf_token %}
-    
-    <label for="numero_tarjeta">Número de la tarjeta:</label>
-    <input type="text" id="numero_tarjeta" name="numero_tarjeta" placeholder="XXXX XXXX XXXX XXXX" required>
+    <h2>Compra de Solespe</h2>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Comprar Solespe</button>
+    </form>
 
-    <label for="titular">Titular de la tarjeta:</label>
-    <input type="text" id="titular" name="titular" placeholder="Nombre del Titular" required>
 
-    <div class="fila">
-        <div class="columna">
-            <label for="fecha">Fecha de expiración:</label>
-            <input type="text" id="fecha" name="fecha" placeholder="MM/YY" required>
-        </div>
-
-        <div class="columna">
-            <label for="codigo_3_digitos">Código de 3 dígitos:</label>
-            <input type="text" id="codigo_3_digitos" name="codigo_3_digitos" placeholder="CVC" required>
-        </div>
-    </div>
-
-    <button type="submit">Pagar</button>
-</form>
-<script src="{% static 'js/tarjeta.js' %}"></script>
-
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
 
 {% endblock %}
