@@ -38,12 +38,6 @@ class Solespe(models.Model):
         txt = "Usuario: {0}, Solespe: {1}"
         return txt.format(self.usuario.username, self.cantidadSolespe)
 
-
-# tvapp/models.py
-# tvapp/forms.py
-from django import forms
-from .models import Tarjeta
-
 class CompraSolespeForm(forms.Form):
     cantidad_solespe = forms.IntegerField(min_value=1, label='Cantidad de Solespe a comprar')
     numero_tarjeta = forms.CharField(max_length=16, label='Número de Tarjeta')
@@ -75,4 +69,3 @@ class CompraSolespeForm(forms.Form):
         tarjeta.save()
 
         return cleaned_data
-

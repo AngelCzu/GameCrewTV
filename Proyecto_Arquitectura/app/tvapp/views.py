@@ -68,7 +68,8 @@ def perfil(request):
     username = usuario_actual.username
     email = usuario_actual.email
     puntos_usuario = Puntos.objects.get(usuario=request.user)
-    return render(request, 'perfil.html', {'puntos_usuario': puntos_usuario})
+    solespe_usuario, creado = Solespe.objects.get_or_create(usuario=request.user)
+    return render(request, 'perfil.html', {'puntos_usuario': puntos_usuario, 'solespe_usuario': solespe_usuario})
 
 @login_required
 def editar_perfil(request):
