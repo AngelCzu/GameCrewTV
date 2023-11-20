@@ -1,0 +1,36 @@
+{% extends 'baseInicio.html' %}
+{% load static %}
+{% block head %}
+<link rel="stylesheet" href="{% static 'css/inicio.css' %}">
+<link rel="stylesheet" href="{% static 'css/tarjeta.css' %}">
+{% endblock %}
+
+
+{% block content %}
+<form>
+    {% csrf_token %}
+    
+    <label for="numero_tarjeta">Número de la tarjeta:</label>
+    <input type="text" id="numero_tarjeta" name="numero_tarjeta" placeholder="XXXX XXXX XXXX XXXX" required>
+
+    <label for="titular">Titular de la tarjeta:</label>
+    <input type="text" id="titular" name="titular" placeholder="Nombre del Titular" required>
+
+    <div class="fila">
+        <div class="columna">
+            <label for="fecha">Fecha de expiración:</label>
+            <input type="text" id="fecha" name="fecha" placeholder="MM/YY" required>
+        </div>
+
+        <div class="columna">
+            <label for="codigo_3_digitos">Código de 3 dígitos:</label>
+            <input type="text" id="codigo_3_digitos" name="codigo_3_digitos" placeholder="CVC" required>
+        </div>
+    </div>
+
+    <button type="submit">Pagar</button>
+</form>
+<script src="{% static 'js/tarjeta.js' %}"></script>
+
+
+{% endblock %}
