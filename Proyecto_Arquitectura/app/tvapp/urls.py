@@ -5,7 +5,7 @@ from . import views
 urlpatterns = [
     path('', views.inicio), 
     path('login_registro', views.login_registro),
-    path('inicio', views.inicio),
+    path('inicio', views.inicio, name='inicio'),
     path('perfil', views.perfil),
     path('editar_perfil', views.editar_perfil), 
     path('streamStramer', views.streamStramer),
