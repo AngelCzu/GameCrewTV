@@ -42,8 +42,8 @@ const domain = 'meet.jit.si';
 
 const options = {
     roomName: nombreSala,
-    width: '70%',
-    height: 500,
+    width: '100%',
+    height: 850,
     parentNode: document.querySelector('#meet'),
     userInfo: {
         email: "viewers@gmail.com",

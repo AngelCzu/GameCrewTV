@@ -52,7 +52,7 @@ def login_registro(request):
             # Crea un nuevo usuario
             user = User.objects.create_user(username=nombre_usuario, email=correo, password=contraseña)
             login(request, user)
-            agregar_puntos(user, 10)
+            agregar_puntos(user, 50)
             # Usuario registrado con éxito, puedes redirigirlo al inicio u otra página.
             return redirect('/inicio')
     # Renderiza la plantilla con el contexto, ya sea que el usuario se autentique o no.
@@ -90,7 +90,8 @@ def editar_perfil(request):
         return redirect('perfil')
 
     return render(request, 'editar_perfil.html')
-    
+
+@login_required    
 def streamStramer(request):
     return render(request, 'streamStramer.html')
 
@@ -102,15 +103,19 @@ def sala_form(request):
         return redirect('/streamStramer')
     return render(request, 'formuSala.html')
 
-@login_required
+
 def streamViewer(request):
     usuario_actual = request.user
+    puntos_usuario = None  # Inicializamos a None para el caso de usuarios no autenticados
 
-    # Comenzar un hilo para agregar puntos en segundo plano
-    puntos_thread = threading.Thread(target=agregar_puntos_periodicamente, args=(usuario_actual,))
-    puntos_thread.daemon = True  # El hilo se detendrá cuando el programa principal se cierre
-    puntos_thread.start()
-    puntos_usuario = Puntos.objects.get(usuario=request.user)
+    if usuario_actual.is_authenticated:
+        # Comenzar un hilo para agregar puntos en segundo plano
+        puntos_thread = threading.Thread(target=agregar_puntos_periodicamente, args=(usuario_actual,))
+        puntos_thread.daemon = True  # El hilo se detendrá cuando el programa principal se cierre
+        puntos_thread.start()
+
+        # Obtener o crear el objeto Puntos asociado al usuario
+        puntos_usuario, created = Puntos.objects.get_or_create(usuario=request.user)
 
     return render(request, 'streamViewer.html', {'puntos_usuario': puntos_usuario})
 
