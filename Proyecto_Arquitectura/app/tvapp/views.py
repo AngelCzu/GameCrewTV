@@ -5,6 +5,8 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.core.mail import send_mail
+from django.conf import settings 
 import threading
 
 def agregar_puntos(usuario, cantidad):
@@ -73,14 +75,20 @@ def perfil(request):
 
 @login_required
 def editar_perfil(request):
-    if request.method == 'POST' and 'logout' in request.POST:
-        # Si se envía una solicitud POST con el nombre 'logout', entonces realiza el logout.
-        logout(request)
-        return redirect('inicio')  # Redirige al usuario a la página de inicio.
+    if request.method == 'POST':
+        # Obtiene los datos del formulario
+        username = request.POST.get('username')
+        email = request.POST.get('email')
 
-    usuario_actual = request.user
-    username = usuario_actual.username
-    email = usuario_actual.email
+        # Actualiza los datos del usuario
+        user = request.user
+        user.username = username
+        user.email = email
+        user.save()
+
+        # Redirige de vuelta al perfil
+        return redirect('perfil')
+
     return render(request, 'editar_perfil.html')
     
 def streamStramer(request):
@@ -141,6 +149,13 @@ def comprar_solespe(request):
             agregar_solespe(request.user, cantidad_solespe)
 
             messages.success(request, f'Se han comprado {cantidad_solespe} Solespe con éxito.')
+            subject = 'Compra exitosa de Solespe'
+            message = f'Gracias por tu compra en Solespe. Se han comprado {cantidad_solespe} Solespe con éxito.'
+            from_email = settings.EMAIL_HOST_USER
+            to_email = [request.user.email]  # Asumo que el correo electrónico del usuario está en el campo 'email'
+
+            send_mail(subject, message, from_email, to_email, fail_silently=False)
+            messages.success(request, message)
             return redirect('inicio')
     else:
         form = CompraSolespeForm()
