@@ -9,6 +9,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.core.mail import send_mail
 from django.conf import settings 
+from .forms import CompraSolespeForm
 import threading
 
 def agregar_puntos(usuario, cantidad):
@@ -165,6 +166,7 @@ def comprar_solespe(request):
             numero_tarjeta = form.cleaned_data['numero_tarjeta']
             fecha_vencimiento = form.cleaned_data['fecha_vencimiento']
             codigo_seguridad = form.cleaned_data['codigo_seguridad']
+            correo_electronico = form.cleaned_data['correo_electronico']  # Nuevo campo de correo electrónico
 
             try:
                 tarjeta = Tarjeta.objects.get(numeroTarjeta=numero_tarjeta, fechaVencimiento=fecha_vencimiento, codigoSeguridad=codigo_seguridad)
@@ -186,17 +188,18 @@ def comprar_solespe(request):
             agregar_solespe(request.user, cantidad_solespe)
 
             messages.success(request, f'Se han comprado {cantidad_solespe} Solespe con éxito.')
+            
+            # Enviar correo electrónico
             subject = 'Compra exitosa de Solespe'
             message = f'Gracias por tu compra en Solespe. Se han comprado {cantidad_solespe} Solespe con éxito.'
             from_email = settings.EMAIL_HOST_USER
-            to_email = [request.user.email]  # Asumo que el correo electrónico del usuario está en el campo 'email'
+            to_email = [correo_electronico]  # Ahora usamos el correo ingresado en el formulario
 
-            send_mail(subject, message, from_email, to_email, fail_silently=False)
+            send_mail(subject, message, from_email, to_email, fail_silently=False)  
+
             messages.success(request, message)
             return redirect('inicio')
     else:
         form = CompraSolespeForm()
 
     return render(request, 'comprar_solespe.html', {'form': form})
-
-
