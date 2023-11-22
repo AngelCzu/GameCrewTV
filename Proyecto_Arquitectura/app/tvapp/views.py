@@ -1,5 +1,7 @@
+from datetime import timezone
 import time
-from django.shortcuts import redirect, render
+from django.http import JsonResponse
+from django.shortcuts import get_object_or_404, redirect, render
 from .models import *
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
@@ -104,20 +106,50 @@ def sala_form(request):
     return render(request, 'formuSala.html')
 
 
-def streamViewer(request):
+def streamViewer(request, sala_id):
     usuario_actual = request.user
-    puntos_usuario = None  # Inicializamos a None para el caso de usuarios no autenticados
+    puntos_usuario = None
+
+    sala = get_object_or_404(Sala, id=sala_id)
+    mensajes = MensajeChat.objects.filter(sala=sala).order_by('timestamp')
 
     if usuario_actual.is_authenticated:
-        # Comenzar un hilo para agregar puntos en segundo plano
-        puntos_thread = threading.Thread(target=agregar_puntos_periodicamente, args=(usuario_actual,))
-        puntos_thread.daemon = True  # El hilo se detendrá cuando el programa principal se cierre
-        puntos_thread.start()
-
-        # Obtener o crear el objeto Puntos asociado al usuario
         puntos_usuario, created = Puntos.objects.get_or_create(usuario=request.user)
+        if request.method == 'GET':
+            sala = get_object_or_404(Sala, id=sala_id)
+            mensajes = MensajeChat.objects.filter(sala=sala).order_by('timestamp')
 
-    return render(request, 'streamViewer.html', {'puntos_usuario': puntos_usuario})
+            data = [{'usuario': mensaje.usuario.username, 'mensaje': mensaje.mensaje, 'timestamp': str(mensaje.timestamp)} for mensaje in mensajes]
+        
+           
+
+    return render(request, 'streamViewer.html', { 'sala': sala, 'mensajes': mensajes, 'puntos_usuario': puntos_usuario})
+
+def enviar_mensaje(request,id):
+    v_mensaje = request.POST['mensaje']
+    usuario = request.user
+
+    if id and v_mensaje:
+        sala = get_object_or_404(Sala, id=id)
+        MensajeChat.objects.create(
+            usuario=usuario,
+            sala=sala,
+            mensaje=v_mensaje
+        )
+
+        return JsonResponse({'status': 'OK'})
+    else:
+        return JsonResponse({'status': 'ERROR', 'message': 'Datos insuficientes'})
+    
+
+def get_messages(request, sala_id):
+    sala = get_object_or_404(Sala, id=sala_id)
+    mensajes = MensajeChat.objects.filter(sala=sala).order_by('timestamp')
+    
+    data = [{'usuario': mensaje.usuario.username, 'mensaje': mensaje.mensaje, 'timestamp': str(mensaje.timestamp)} for mensaje in mensajes]
+    
+    return JsonResponse({'mensajes': data})
+
 
 def agregar_solespe(usuario, cantidad_solespe):
     # Obtener o crear el objeto Solespe asociado al usuario

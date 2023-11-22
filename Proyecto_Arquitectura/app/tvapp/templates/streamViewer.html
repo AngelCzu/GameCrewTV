@@ -15,10 +15,16 @@
 
     <div class="container" id="chat-container">
         <div id="chat">
-            
+            {% for mensaje in mensajes %}
+                <p>{{ mensaje.usuario.username }} ({{ mensaje.timestamp|date:"H:i:s" }}): {{ mensaje.mensaje }}</p>
+            {% endfor %}
         </div>
-        <input type="text" id="input" placeholder="Escribe un mensaje...">
-                <button onclick="sendMessage()">Enviar</button>
+        
+        <form id="enviar_mensaje" action="/enviar_mensaje/{{sala.id}}" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+                <input name="mensaje" type="text" id="input" placeholder="Escribe un mensaje...">
+                <p> </p>
+                <button type="button" onclick="sendMessage()">Enviar</button>
                 <input type="checkbox" id="destacar"> Destacar mensaje
                 <br>
                 {% if user.is_authenticated %}
@@ -30,22 +36,91 @@
                     <option value="logo">Sticker 1</option>
                     <option value="logo_transparent">Sticker 2</option>
                     <!-- Agrega más opciones de stickers aquí -->
-                </select>
+                </select> 
+            </form>
     </div>
 
 </div>
 
-   
-
-
-
-
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"
     integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm"
     crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js" integrity="sha384-HwwvtgBNo3bZJJLYd8oVXjrBZt8cqVSpeBNS5n7C8IVInixGAoxmnlMuBnhbgrkm" crossorigin="anonymous"></script>
 
 <script src="https://meet.jit.si/external_api.js"></script>
+<script src="{% static 'js/jquery-3.6.4.min.js' %}"></script>
 <script src="{% static 'js/viewer.js' %}"></script>
-<script src="{% static 'js/chat.js' %}"></script>
+
+<script>
+    function sendMessage() {
+        var form = $('#enviar_mensaje');
+        var url = form.attr('action');
+
+        $.ajax({
+            type: 'POST',
+            url: url,
+            data: form.serialize(),
+            dataType: 'json',
+            success: function (data) {
+                if (data.status === 'OK') {
+                    // Limpiar el input de mensaje después de enviar el mensaje
+                    $('#input').val('');
+
+                    // Actualizar el contenido del chat con los mensajes recibidos
+                    var chatDiv = $('#chat');
+                    chatDiv.empty();
+                    data.mensajes.forEach(function (mensaje) {
+                        var mensajeHTML = '<p>' + mensaje.usuario + ' (' +  mensaje.timestamp  + '): ' + mensaje.mensaje + '</p>';
+                        chatDiv.append(mensajeHTML);
+                    });
+                } else {
+                    console.log('Error al enviar mensaje: ' + data.message);
+                }
+            },
+            error: function (error) {
+                console.log('Error al enviar mensaje: ' + error);
+            }
+        });
+
+        // Evitar que el formulario se envíe normalmente
+        return false;
+    }
+
+    function updateChat() {
+        var salaId = {{ sala.id }};
+        var url = "/get_messages/" + salaId + "/";
+    
+        $.ajax({
+            url: url,
+            type: 'GET',
+            dataType: 'json',
+            success: function (data) {
+                var chatDiv = $('#chat');
+                chatDiv.empty(); // Limpiar el contenido actual del chat
+    
+                // Verificar si data y data.mensajes están definidos
+                if (data && data.mensajes) {
+                    // Agregar los nuevos mensajes al chat
+                    data.mensajes.forEach(function (mensaje) {
+                        var mensajeHTML = '<p>' + mensaje.usuario + ' (' +  mensaje.timestamp  + '): ' + mensaje.mensaje + '</p>';
+                        chatDiv.append(mensajeHTML);
+                    });
+                } else {
+                    console.log('Datos de mensajes no válidos:', data);
+                }
+            },
+            error: function (error) {
+                console.log('Error al obtener mensajes: ' + error);
+            },
+            complete: function () {
+                // Establecer un temporizador para la próxima actualización después de 1000 ms (1 segundo)
+                setTimeout(updateChat, 1000);
+            }
+        });
+    }
+    
+    // Llama a la función inicialmente para iniciar el proceso de actualización
+    updateChat();
+</script>
+
 {% endblock %}

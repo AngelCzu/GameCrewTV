@@ -12,6 +12,20 @@ class Sala(models.Model):
     def __str__(self):
         txt = "id: {0}, nombresala: {1}"
         return txt.format(self.id, self.nombreSala)
+    
+
+class MensajeChat(models.Model):
+    usuario = models.ForeignKey(User, on_delete=models.CASCADE)
+    sala = models.ForeignKey('Sala', on_delete=models.CASCADE)
+    mensaje = models.TextField()
+    timestamp = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        txt = "ID_Sala: {0}, Nombre_Sala: {1}"
+        return txt.format(self.id, self.sala.nombreSala) 
+    
+
+    
 
 class Puntos(models.Model):
     usuario = models.OneToOneField(User, on_delete=models.CASCADE)

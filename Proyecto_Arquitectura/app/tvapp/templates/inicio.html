@@ -6,39 +6,34 @@
 
 {% block content %}
 
-    <div class="container">
-        <h2 class="text">Bienvenido a Game Crew TV</h2>
-        <p  class="text">Este es el contenido de la página de inicio.</p>
-        <p></p>
-        <p></p>
-        <a href="formuSala">cambiar de vista</a>
+<div class="container">
+    <h2 class="text">Bienvenido a Game Crew TV</h2>
+    <p class="text">Este es el contenido de la página de inicio.</p>
+    <p></p>
+    <p></p>
+    <a href="formuSala">Cambiar de vista</a>
+</div>
 
-    </div>
-
-    <!-- canales -->
-    <br>
-    <div class="container">
-        <div class="row">
-
-            {% for s in nomSala %}
-            <div class="col-md-3">
-                <a href="streamViewer" >
-                    <div class="card" style="width: 18rem;">
-                    
-                        <img src="static/img/ibai.jpg" class="card-img-top custom-card-img" alt="...">
-                        <div class="card_body">
-                            <p class="card-text" data-nombre-sala="{{ s.nombreSala }}">{{ s.nombreSala }}</p>
-                        </div>
-                    
+<!-- Canales -->
+<br>
+<div class="container">
+    <div class="row">
+        {% for s in nomSala %}
+        <div class="col-md-3">
+            <a href="{% url 'stream_viewer' s.id %}">
+                <div class="card" style="width: 18rem;">
+                    <img src="static/img/ibai.jpg" class="card-img-top custom-card-img" alt="...">
+                    <div class="card_body">
+                        <p class="card-text" data-nombre-sala="{{ s.nombreSala }}">{{ s.nombreSala }}</p>
                     </div>
-                </a>
-            </div>
-             {% endfor %}
-
-        
+                </div>
+            </a>
+        </div>
+        {% endfor %}
     </div>
-    <!-- Puedes agregar contenido específico aquí -->
-    <script src="{% static 'js/streamInicio.js' %}"></script>
+</div>
 
+<!-- Puedes agregar contenido específico aquí -->
+<script src="{% static 'js/streamInicio.js' %}"></script>
 
 {% endblock %}

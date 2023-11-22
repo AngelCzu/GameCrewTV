@@ -48,7 +48,7 @@
 
             
                 <li class="nav-link">
-                    <a class="" href="inicio">
+                    <a class="" href="{% url 'inicio' %}">
                         <i id="icon" class="bi bi-house-door"></i>
                         <span class="text nav-text">Inicio</span>
                     </a>
@@ -62,13 +62,13 @@
         <div class="bottom-content">
           <li class="">
               {% if user.is_authenticated %}
-                <a href="perfil">
+                <a href="{% url 'perfil' %}">
                   <i id="icon" class="bi bi-person"></i>
                   <span class="text nav-text">¡Hola, {{ user.username }}!</span>
                 </a>
                   
               {% else %}
-                  <a href="login_registro">
+                  <a href="{% url 'login_registro' %}">
                       <i id="icon" class="bi bi-person"></i>
                       <span class="text nav-text">Inicio Sesión</span>
                   </a>
