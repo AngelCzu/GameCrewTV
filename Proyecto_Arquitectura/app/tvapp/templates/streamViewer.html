@@ -92,37 +92,41 @@
     }
 
     function updateChat() {
-        var salaId = {{ sala.id }};
-        var url = "/get_messages/" + salaId + "/";
-    
-        $.ajax({
-            url: url,
-            type: 'GET',
-            dataType: 'json',
-            success: function (data) {
-                var chatDiv = $('#chat');
-                chatDiv.empty(); // Limpiar el contenido actual del chat
-    
-                // Verificar si data y data.mensajes están definidos
-                if (data && data.mensajes) {
-                    // Agregar los nuevos mensajes al chat
-                    data.mensajes.forEach(function (mensaje) {
-                        var mensajeHTML = '<p>' + mensaje.usuario + ' (' +  mensaje.timestamp  + '): ' + mensaje.mensaje + '</p>';
-                        chatDiv.append(mensajeHTML);
-                    });
-                } else {
-                    console.log('Datos de mensajes no válidos:', data);
-                }
-            },
-            error: function (error) {
-                console.log('Error al obtener mensajes: ' + error);
-            },
-            complete: function () {
-                // Establecer un temporizador para la próxima actualización después de 1000 ms (1 segundo)
-                setTimeout(updateChat, 1000);
+    var salaId = {{ sala.id }};
+    var url = "/get_messages/" + salaId + "/";
+
+    $.ajax({
+        url: url,
+        type: 'GET',
+        dataType: 'json',
+        success: function (data) {
+            var chatDiv = $('#chat');
+            chatDiv.empty(); // Limpiar el contenido actual del chat
+
+            // Verificar si data y data.mensajes están definidos
+            if (data && data.mensajes) {
+                // Agregar los nuevos mensajes al chat
+                data.mensajes.forEach(function (mensaje) {
+                    // Obtener la hora actual en formato HH:MM:SS
+                    var hora = new Date(mensaje.timestamp).toLocaleTimeString();
+
+                    // Crear el HTML del mensaje con la hora
+                    var mensajeHTML = '<p>' + mensaje.usuario + ' (' +  hora  + '): ' + mensaje.mensaje + '</p>';
+                    chatDiv.append(mensajeHTML);
+                });
+            } else {
+                console.log('Datos de mensajes no válidos:', data);
             }
-        });
-    }
+        },
+        error: function (error) {
+            console.log('Error al obtener mensajes: ' + error);
+        },
+        complete: function () {
+            // Establecer un temporizador para la próxima actualización después de 1000 ms (1 segundo)
+            setTimeout(updateChat, 1000);
+        }
+    });
+}
     
     // Llama a la función inicialmente para iniciar el proceso de actualización
     updateChat();

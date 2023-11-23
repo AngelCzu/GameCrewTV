@@ -10,9 +10,6 @@ from django.contrib import messages
 from django.core.mail import send_mail
 from django.conf import settings 
 from .forms import CompraSolespeForm
-from mandrill import Mandrill
-import mailchimp_transactional as MailchimpTransactional
-from mailchimp_transactional.api_client import ApiClientError
 from django.contrib import messages
 import threading
 
@@ -219,7 +216,7 @@ def comprar_solespe(request):
             subject = 'Compra exitosa de Solespe'
             #mensaje = f'Gracias por tu compra en Solespe. Se han comprado {cantidad_solespe} Solespe con éxito.'
             
-            to_email = [correo_electronico]
+            to_email = correo_electronico
 
             subject = 'Compra exitosa de Solespe' #Welcome to DataFlair'
             message = f'Gracias por tu compra en Solespe. Se han comprado {cantidad_solespe} Solespe con éxito.' #'Hope you are enjoying your Django Tutorials'
