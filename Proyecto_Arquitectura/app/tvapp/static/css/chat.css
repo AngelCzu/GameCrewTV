@@ -52,7 +52,7 @@ img{
 #chat-container {
     overflow-y: hidden;
     width: 500px; /* Ancho del área de chat (ajústalo según sea necesario) */
-    height: 60vh; /* Altura del área de chat (ajústala según sea necesario) */
+    height: auto; /* Altura del área de chat (ajústala según sea necesario) */
     
 }
 

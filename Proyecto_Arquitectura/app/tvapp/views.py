@@ -116,6 +116,7 @@ def streamViewer(request, sala_id):
 
     if usuario_actual.is_authenticated:
         puntos_usuario, created = Puntos.objects.get_or_create(usuario=request.user)
+        
         if request.method == 'GET':
             sala = get_object_or_404(Sala, id=sala_id)
             mensajes = MensajeChat.objects.filter(sala=sala).order_by('timestamp')

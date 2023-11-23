@@ -7,7 +7,7 @@
 {% endblock %}
 
 {% block content %}
-<div class="body">
+<div data-email="{{ email }}" class="body">
 
     <div class="container" id="meet">
         
@@ -49,9 +49,14 @@
 
 <script src="https://meet.jit.si/external_api.js"></script>
 <script src="{% static 'js/jquery-3.6.4.min.js' %}"></script>
-<script src="{% static 'js/viewer.js' %}"></script>
+
 
 <script>
+
+    const usuario = "{{ user.username }}" || "viewers";
+    const correo = "{{ user.email }}" || "viewers";
+
+
     function sendMessage() {
         var form = $('#enviar_mensaje');
         var url = form.attr('action');
@@ -121,6 +126,64 @@
     
     // Llama a la función inicialmente para iniciar el proceso de actualización
     updateChat();
-</script>
+
+
+    const nombreSala = localStorage.getItem('nombreSalaSeleccionada') || [];
+    var interfaceConfig = {
+
+        TOOLBAR_BUTTONS: [
+            //'microphone',           //Activar Microfono
+            //'camera',               //Activar Camara
+            //'closedcaptions',     //mostrar subtítulos
+            //'desktop',              //Compartir pantalla
+            //'fullscreen',           //Pantalla Completa
+            //'fodeviceselection',    //Seleccion de dispositivos de audios y videos
+            //'hangup',                //SAlir
+            //'profile',
+            // 'info',               //ver el link
+            //'chat',
+            //'recording',             //grabar
+            //'livestreaming',      //admin lo puede hacer
+            //'etherpad',           //Edicion de documentos
+            // 'sharedvideo',        //admin lo puede hacer
+            //'settings',             //Config de la reunion
+            //'raisehand',              //manito
+            //'videoquality',           //calidad de video
+            //'filmstrip',          //miniatura de los participantes
+            //'invite',               //invita a otros a la reunion
+            //'feedback',           //Los usuarios dan una retroalimentacion o comentarios durante la reunion
+            //'stats',                //estadísticas de la reunión, como datos de rendimiento
+            //'shortcuts',          //atajos de teclado
+            //'tileview',           //vista que muestra a todos los participantes en mosaico
+            //'videobackgroundblur',//desenfocar su fondo de video
+            //'download',           //descargar grabaciones o archivos compartidos durante la reunión.
+            //'help',               
+            //'mute-everyone',    //administrador
+            'e2ee'                  //Cifrado de extremo a extremo
+        ],
+
+        SETTINGS_SECTIONS: [
+
+        ],
+        SHOW_CHROME_EXTENSION_BANNER: false
+    };
+
+    const domain = 'meet.jit.si';
+
+    const options = {
+        roomName: nombreSala,
+        width: '100%',
+        height: 500,
+        parentNode: document.querySelector('#meet'),
+        userInfo: {
+            email: correo,
+            displayName: usuario,
+            role: 'participant'
+        },
+        noSsl: true,
+        interfaceConfigOverwrite: interfaceConfig,
+    };
+    const api = new JitsiMeetExternalAPI(domain, options);
+    </script>
 
 {% endblock %}
