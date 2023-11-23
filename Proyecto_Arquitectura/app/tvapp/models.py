@@ -5,14 +5,24 @@ from django.contrib import messages
 
 
 # Create your models here.
+
+class Categoria(models.Model):
+    id_categoria = models.IntegerField(primary_key=True)
+    nombre_categoria = models.CharField(max_length=22)
+
+    def __str__(self):
+        txt = "{0} - {1}"
+        return txt.format(self.id_categoria , self.nombre_categoria)
+    
 class Sala(models.Model):
+    categoriaId = models.ForeignKey(Categoria, on_delete=models.CASCADE)
     id = models.AutoField(primary_key=True)
-    nombreSala = models.CharField(max_length=100)  # Puedes ajustar la longitud máxima según tus necesidades
+    nombreSala = models.CharField(max_length=100)
 
     def __str__(self):
         txt = "id: {0}, nombresala: {1}"
         return txt.format(self.id, self.nombreSala)
-    
+
 
 class MensajeChat(models.Model):
     usuario = models.ForeignKey(User, on_delete=models.CASCADE)

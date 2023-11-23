@@ -110,19 +110,23 @@ def streamStramer(request, sala_id):
             mensajes = MensajeChat.objects.filter(sala=sala).order_by('timestamp')
 
             data = [{'usuario': mensaje.usuario.username, 'mensaje': mensaje.mensaje, 'timestamp': str(mensaje.timestamp)} for mensaje in mensajes]
-        
-           
-
     return render(request, 'streamStramer.html', { 'sala': sala, 'mensajes': mensajes, 'puntos_usuario': puntos_usuario})
 
 def sala_form(request):
-    nombre_sala = request.POST.get('txtSala')
-    if nombre_sala:
-        sala = Sala(nombreSala=nombre_sala)
-        sala.save()
-        sala_id = sala.id
-        return redirect(f'/streamStramer/{sala_id}/')
-    return render(request, 'formuSala.html')
+    categorias = Categoria.objects.all()
+    
+    if request.method == 'POST':
+        v_categoria_id = request.POST.get('cmbCategoria')
+        v_categoria = Categoria.objects.get(id_categoria=v_categoria_id)
+        nombre_sala = request.POST.get('txtSala')
+        
+        if nombre_sala:
+            sala = Sala(nombreSala=nombre_sala, categoriaId=v_categoria)
+            sala.save()
+            sala_id = sala.id
+            return redirect(f'/streamStramer/{sala_id}/')
+    
+    return render(request, 'formuSala.html', {"cate": categorias})
 
 
 def streamViewer(request, sala_id):

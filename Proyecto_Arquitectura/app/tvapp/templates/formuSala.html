@@ -9,17 +9,24 @@
 
 <form id="" action="/formuSala" method="POST" enctype="multipart/form-data">
     {% csrf_token %}
-
     <div class="container text-center">
         <div class="row">
             <div class="col-md-12">
                 <label for="txtSala" class="text fs-6 mt-5">Nombre Sala:</label>
                 <input name="txtSala" id="txtSala" class="form-control mt-1" type="text" placeholder="Ingrese nombre sala">
-                <button onclick="nombreSala()" type="submit" class="btn btn-primary mt-2">Agregar Sala</button>
             </div>
         </div>
+        <div class="col-md-4">
+            <label for="cmbCategoria">Categoria:</label>
+            <select id="cmbCategoria" name="cmbCategoria" class="form-select" aria-label="Default select example">
+                <option disabled selected>Seleccione</option>
+                {% for c in cate %}
+                <option value="{{c.id_categoria}}">{{c.nombre_categoria}}</option>
+                {% endfor %}
+            </select> 
+        </div>
+        <button onclick="nombreSala()" type="submit" class="btn btn-primary mt-2">Agregar Sala</button>
     </div>
-    
 </form>
 
 <script src="{% static 'js/formuSala.js' %}"></script>
