@@ -136,10 +136,10 @@ APPEND_SLASH=False
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'infoarquitectura46@gmail.com'
-EMAIL_HOST_PASSWORD = 'AngelArqui1234./'
+EMAIL_HOST = 'smtp.zoho.com'
+EMAIL_HOST_PASSWORD = 'Arquitectura54' # Ingrese su password de correo
+EMAIL_HOST_USER = 'arquitecura42@zohomail.com' # ingrese su correo de gmail
+EMAIL_PORT = 465
+EMAIL_USE_TLS = False
+EMAIL_USE_SSL = True

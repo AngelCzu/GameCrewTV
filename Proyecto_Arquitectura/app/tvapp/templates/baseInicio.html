@@ -54,6 +54,15 @@
                     </a>
                 </li>
 
+                {% if user.is_authenticated %}
+                <li class="nav-link">
+                  <a class="" href="{% url 'comprar_solespe' %}">
+                      <i id="icon" class="bi bi-currency-dollar"></i>
+                      <span class="text nav-text">Comprar Solespe</span>
+                  </a>
+              </li>
+              {% endif %}
+
                 
 
             

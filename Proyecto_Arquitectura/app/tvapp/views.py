@@ -10,6 +10,10 @@ from django.contrib import messages
 from django.core.mail import send_mail
 from django.conf import settings 
 from .forms import CompraSolespeForm
+from mandrill import Mandrill
+import mailchimp_transactional as MailchimpTransactional
+from mailchimp_transactional.api_client import ApiClientError
+from django.contrib import messages
 import threading
 
 def agregar_puntos(usuario, cantidad):
@@ -210,17 +214,20 @@ def comprar_solespe(request):
             # Agregar Solespe al usuario
             agregar_solespe(request.user, cantidad_solespe)
 
-            messages.success(request, f'Se han comprado {cantidad_solespe} Solespe con éxito.')
-            
+
             # Enviar correo electrónico
             subject = 'Compra exitosa de Solespe'
-            message = f'Gracias por tu compra en Solespe. Se han comprado {cantidad_solespe} Solespe con éxito.'
-            from_email = settings.EMAIL_HOST_USER
-            to_email = [correo_electronico]  # Ahora usamos el correo ingresado en el formulario
+            #mensaje = f'Gracias por tu compra en Solespe. Se han comprado {cantidad_solespe} Solespe con éxito.'
+            
+            to_email = [correo_electronico]
 
-            send_mail(subject, message, from_email, to_email, fail_silently=False)  
-
-            messages.success(request, message)
+            subject = 'Compra exitosa de Solespe' #Welcome to DataFlair'
+            message = f'Gracias por tu compra en Solespe. Se han comprado {cantidad_solespe} Solespe con éxito.' #'Hope you are enjoying your Django Tutorials'
+            recepient = to_email
+            send_mail(subject, message, 
+            settings.EMAIL_HOST_USER, 
+            [recepient], 
+            fail_silently = False)
             return redirect('inicio')
     else:
         form = CompraSolespeForm()
