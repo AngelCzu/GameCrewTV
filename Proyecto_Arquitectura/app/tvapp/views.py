@@ -95,15 +95,33 @@ def editar_perfil(request):
     return render(request, 'editar_perfil.html')
 
 @login_required    
-def streamStramer(request):
-    return render(request, 'streamStramer.html')
+def streamStramer(request, sala_id):
+    usuario_actual = request.user
+    puntos_usuario = None
+
+    sala = get_object_or_404(Sala, id=sala_id)
+    mensajes = MensajeChat.objects.filter(sala=sala).order_by('timestamp')
+
+    if usuario_actual.is_authenticated:
+        puntos_usuario, created = Puntos.objects.get_or_create(usuario=request.user)
+        
+        if request.method == 'GET':
+            sala = get_object_or_404(Sala, id=sala_id)
+            mensajes = MensajeChat.objects.filter(sala=sala).order_by('timestamp')
+
+            data = [{'usuario': mensaje.usuario.username, 'mensaje': mensaje.mensaje, 'timestamp': str(mensaje.timestamp)} for mensaje in mensajes]
+        
+           
+
+    return render(request, 'streamStramer.html', { 'sala': sala, 'mensajes': mensajes, 'puntos_usuario': puntos_usuario})
 
 def sala_form(request):
     nombre_sala = request.POST.get('txtSala')
     if nombre_sala:
         sala = Sala(nombreSala=nombre_sala)
         sala.save()
-        return redirect('/streamStramer')
+        sala_id = sala.id
+        return redirect(f'/streamStramer/{sala_id}/')
     return render(request, 'formuSala.html')
 
 

@@ -55,7 +55,7 @@
 
     const usuario = "{{ user.username }}" || "viewers";
     const correo = "{{ user.email }}" || "viewers";
-
+    const nombreSala = "{{ sala.nombreSala }}" ;
 
     function sendMessage() {
         var form = $('#enviar_mensaje');
@@ -128,7 +128,7 @@
     updateChat();
 
 
-    const nombreSala = localStorage.getItem('nombreSalaSeleccionada') || [];
+    
     var interfaceConfig = {
 
         TOOLBAR_BUTTONS: [
