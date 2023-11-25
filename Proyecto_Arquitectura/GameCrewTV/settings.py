@@ -127,6 +127,12 @@ LOGOUT_REDIRECT_URL = '/inicio'
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
+
+
+
+# STATIC_ROOT es el directorio donde se recopilarán todos los archivos estáticos para producción.
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
 STATIC_URL = 'static/'
 MEDIA_URL = 'media/'
 MEDIA_ROOT = BASE_DIR / 'media/'
