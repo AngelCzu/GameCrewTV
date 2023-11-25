@@ -28,7 +28,6 @@ SECRET_KEY = 'django-insecure-c=_b#izmmdl7^w(reytov+q3ng$38+gs-5*ei-!k2h%0@)5&_m
 DEBUG = True
 
 
-ALLOWED_HOSTS = []
 
 
 
@@ -42,7 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'app.tvapp'
+    'tvapp'
 ]
 
 MIDDLEWARE = [
@@ -55,12 +54,12 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'GameCrewTV.urls'
+ROOT_URLCONF = 'gamecrewtv.urls'
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR, 'app/tvapp/templates'],  # Reemplaza 'tu_app' por el nombre de tu aplicación
+        'DIRS': [BASE_DIR, 'tvapp/templates'],  # Reemplaza 'tu_app' por el nombre de tu aplicación
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -73,7 +72,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'GameCrewTV.wsgi.application'
+WSGI_APPLICATION = 'gamecrewtv.wsgi.application'
 
 
 # Database
