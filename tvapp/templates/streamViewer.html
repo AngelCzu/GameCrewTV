@@ -19,7 +19,7 @@
                 <p>{{ mensaje.usuario.username }} ({{ mensaje.timestamp|date:"H:i:s" }}): {{ mensaje.mensaje }}</p>
             {% endfor %}
         </div>
-        
+        {% if user.is_authenticated %}
         <form id="enviar_mensaje" action="/enviar_mensaje/{{sala.id}}" method="POST" enctype="multipart/form-data">
             {% csrf_token %}
                 <input name="mensaje" type="text" id="input" placeholder="Escribe un mensaje...">
@@ -27,10 +27,10 @@
                 <button type="button" onclick="sendMessage()">Enviar</button>
                 <input type="checkbox" id="destacar"> Destacar mensaje
                 <br>
-                {% if user.is_authenticated %}
+                
                 <span class="puntos-container">Puntos: {{ puntos_usuario.puntos }}</span>
                 <button id="seguir-btn">Seguir</button>
-                {% endif %}
+                
                 <select id="sticker-dropdown">
                     <option value="" selected>Selecciona un Sticker</option>
                     <option value="logo">Sticker 1</option>
@@ -38,6 +38,7 @@
                     <!-- Agrega más opciones de stickers aquí -->
                 </select> 
             </form>
+            {% endif %}
     </div>
 
 </div>

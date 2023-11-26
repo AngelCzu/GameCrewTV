@@ -21,7 +21,7 @@
         <div class="col-md-3">
             <a href="{% url 'stream_viewer' s.id %}">
                 <div class="card" style="width: 18rem;">
-                    <img src="static/img/ibai.jpg" class="card-img-top custom-card-img" alt="...">
+                    <img src="{% static 'css/img/ibai.jpg' %}" class="card-img-top custom-card-img" alt="...">
                     <div class="card_body">
                         <p class="card-text" data-nombre-sala="{{ s.nombreSala }}">{{ s.nombreSala }}</p>
                     </div>
