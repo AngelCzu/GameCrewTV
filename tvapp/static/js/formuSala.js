@@ -2,6 +2,7 @@ function nombreSala() {
     // Obtén el valor del input con el id 'txtSala'.
     const nombreSalaInput = document.getElementById('txtSala');
     const nombreSala = nombreSalaInput.value;
+    console.log(nombreSala);
 
     // Verifica si se ingresó un nombre de sala.
     if (nombreSala) {
