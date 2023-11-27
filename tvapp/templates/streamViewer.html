@@ -30,13 +30,14 @@
                 {% if user.is_authenticated %}
                 <span class="puntos-container">Puntos: {{ puntos_usuario.puntos }}</span>
                 <button id="seguir-btn">Seguir</button>
-                {% endif %}
+                
                 <select id="sticker-dropdown">
                     <option value="" selected>Selecciona un Sticker</option>
                     <option value="logo">Sticker 1</option>
                     <option value="logo_transparent">Sticker 2</option>
                     <!-- Agrega más opciones de stickers aquí -->
                 </select> 
+                {% endif %}
             </form>
     </div>
 
