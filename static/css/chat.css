@@ -1,0 +1,69 @@
+#chat {
+    width: 300px;
+    height: 400px;
+    border: 1px solid #ccc;
+    
+}
+#input {
+    width: 300px;
+}
+.message {
+    background-color: #f2f2f2; /* Fondo de los mensajes normales */
+    padding: 5px;
+    margin: 5px 0;
+}
+.user-message {
+    background-color: #4CAF50; /* Fondo de tus mensajes destacados */
+    color: white; /* Color del texto en tus mensajes destacados */
+}
+.puntos-container {
+    background-color: #eee;
+    padding: 5px;
+    margin: 5px;
+    border: 1px solid #ccc;
+    display: inline-block;
+}
+img{
+    height: 25px;
+    width: 25px;
+}
+
+.row{
+    padding-right: 100px;
+    width: 100%;
+}
+
+.body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.container {
+    text-align: center;
+}
+
+#meet-container {
+    margin-right: 10px; /* Espaciado entre los contenedores (puedes ajustarlo según sea necesario) */
+}
+
+#chat-container {
+    overflow-y: hidden;
+    width: 500px; /* Ancho del área de chat (ajústalo según sea necesario) */
+    height: auto; /* Altura del área de chat (ajústala según sea necesario) */
+    
+}
+
+#chat {
+    overflow-y: auto;
+    text-align: left;
+    width: 100%;
+    padding: 10px;
+}
+
+#input {
+    width: 92%; /* Ancho del campo de entrada de texto (ajústalo según sea necesario) */
+    padding: 5px;
+}

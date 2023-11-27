@@ -1,0 +1,79 @@
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f4;
+}
+
+form {
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+}
+
+label {
+    display: block;
+    margin: 10px 0 5px;
+    color: #333;
+    font-size: 14px;
+}
+
+input {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    box-sizing: border-box;
+    border: none;
+    border-bottom: 1px solid #ccc;
+    background-color: #fff;
+    font-size: 16px;
+    outline: none;
+}
+
+input::placeholder {
+    color: #bbb;
+}
+
+button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 12px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+
+
+input#numero_tarjeta {
+    font-family: 'Arial', sans-serif;
+    font-size: 18px;
+    letter-spacing: 2px;
+}
+
+input#fecha,
+input#codigo_3_digitos {
+    width: 45%;
+    display: inline-block;
+    margin-right: 5%;
+}
+
+input#codigo_3_digitos {
+    margin-top: 10px;
+}
+.fila {
+    display: flex;
+    justify-content: space-between;
+}
+
+.columna {
+    flex: 1;
+    margin-right: 10px; /* Ajusta según sea necesario para el espacio entre las columnas */
+}
