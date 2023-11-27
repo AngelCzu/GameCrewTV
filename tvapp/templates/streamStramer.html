@@ -22,21 +22,23 @@
         
         <form id="enviar_mensaje" action="/enviar_mensaje/{{sala.id}}" method="POST" enctype="multipart/form-data">
             {% csrf_token %}
+            {% if user.is_authenticated %}
                 <input name="mensaje" type="text" id="input" placeholder="Escribe un mensaje...">
                 <p> </p>
                 <button type="button" onclick="sendMessage()">Enviar</button>
                 <input type="checkbox" id="destacar"> Destacar mensaje
                 <br>
-                {% if user.is_authenticated %}
+                
                 <span class="puntos-container">Puntos: {{ puntos_usuario.puntos }}</span>
                 <button id="seguir-btn">Seguir</button>
-                {% endif %}
+                
                 <select id="sticker-dropdown">
                     <option value="" selected>Selecciona un Sticker</option>
                     <option value="logo">Sticker 1</option>
                     <option value="logo_transparent">Sticker 2</option>
                     <!-- Agrega más opciones de stickers aquí -->
                 </select> 
+                {% endif %}
             </form>
     </div>
 
@@ -127,41 +129,44 @@
         }
     });
 }
-
-
     
+    // Llama a la función inicialmente para iniciar el proceso de actualización
+    updateChat();
+
+
+    const nombreSala = localStorage.getItem('nombreSalaSeleccionada') || [];
     var interfaceConfig = {
 
         TOOLBAR_BUTTONS: [
-        'microphone',           //Activar Microfono
-        'camera',               //Activar Camara
-        //'closedcaptions',     //mostrar subtítulos
-        'desktop',              //Compartir pantalla
-        'fullscreen',           //Pantalla Completa
-        'fodeviceselection',    //Seleccion de dispositivos de audios y videos
-        'hangup',                //SAlir
-        //'profile',
-        // 'info',               //ver el link
-        //'chat',
-        //'recording',             //grabar
-        //'livestreaming',      //admin lo puede hacer
-        //'etherpad',           //Edicion de documentos
-        // 'sharedvideo',        //admin lo puede hacer
-        'settings',             //Config de la reunion
-        //'raisehand',              //manito
-        //'videoquality',           //calidad de video
-        //'filmstrip',          //miniatura de los participantes
-        'invite',               //invita a otros a la reunion
-        //'feedback',           //Los usuarios dan una retroalimentacion o comentarios durante la reunion
-        'stats',                //estadísticas de la reunión, como datos de rendimiento
-        //'shortcuts',          //atajos de teclado
-        //'tileview',           //vista que muestra a todos los participantes en mosaico
-        //'videobackgroundblur',//desenfocar su fondo de video
-        //'download',           //descargar grabaciones o archivos compartidos durante la reunión.
-        //'help',               
-        //'mute-everyone',    //administrador
-        'e2ee'                  //Cifrado de extremo a extremo
-    ],
+            'microphone',           //Activar Microfono
+            'camera',               //Activar Camara
+            //'closedcaptions',     //mostrar subtítulos
+            'desktop',              //Compartir pantalla
+            'fullscreen',           //Pantalla Completa
+            'fodeviceselection',    //Seleccion de dispositivos de audios y videos
+            'hangup',                //SAlir
+            //'profile',
+            // 'info',               //ver el link
+            //'chat',
+            //'recording',             //grabar
+            //'livestreaming',      //admin lo puede hacer
+            //'etherpad',           //Edicion de documentos
+            // 'sharedvideo',        //admin lo puede hacer
+            'settings',             //Config de la reunion
+            //'raisehand',              //manito
+            //'videoquality',           //calidad de video
+            //'filmstrip',          //miniatura de los participantes
+            'invite',               //invita a otros a la reunion
+            //'feedback',           //Los usuarios dan una retroalimentacion o comentarios durante la reunion
+            'stats',                //estadísticas de la reunión, como datos de rendimiento
+            //'shortcuts',          //atajos de teclado
+            //'tileview',           //vista que muestra a todos los participantes en mosaico
+            //'videobackgroundblur',//desenfocar su fondo de video
+            //'download',           //descargar grabaciones o archivos compartidos durante la reunión.
+            //'help',               
+            //'mute-everyone',    //administrador
+            'e2ee'                  //Cifrado de extremo a extremo
+        ],
 
         SETTINGS_SECTIONS: [
 
