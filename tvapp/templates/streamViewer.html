@@ -8,7 +8,7 @@
 
 {% block content %}
 <div data-email="{{ email }}" class="body">
-
+    
     <div class="container" id="meet">
         
     </div>
@@ -24,7 +24,7 @@
         {% endfor %}
         </div>
         
-        <form id="enviar_mensaje" action="/enviar_mensaje/{{sala.id}}" method="POST" enctype="multipart/form-data">
+        <form id="enviar_mensaje" action="/enviar_mensaje/{{sala_seleccionada.id}}" method="POST" enctype="multipart/form-data">
             {% csrf_token %}
             {% if user.is_authenticated %}
                 <input name="mensaje" type="text" id="input" placeholder="Escribe un mensaje...">
@@ -34,7 +34,7 @@
                 <br>
                 
                 <span class="puntos-container">Puntos: {{ puntos_usuario.puntos }}</span>
-                <button id="seguir-btn">Seguir</button>
+                
                 
                 <select id="sticker-dropdown">
                     <option value="" selected>Selecciona un Sticker</option>
@@ -46,8 +46,14 @@
                     <option value="/static/img/logo_transparent.png">logo 3</option>
                     <!-- Agrega más opciones de stickers aquí -->
                 </select> 
-                {% endif %}
+                
             </form>
+                {% if usuario_se_suscribio %}
+                <button type="submit" name="desuscribir" data-usuario-desuscribir-id="{{ sala_seleccionada.creador.id }}" id="desuscribir-btn">Desuscribirse de {{ sala_seleccionada.creador }}</button>   
+                {% else %}
+                <button type="submit" name="seguir" data-usuario-suscrito-id="{{ sala_seleccionada.creador.id }}" id="seguir-btn">Seguir a {{ sala_seleccionada.creador }}</button>
+                {% endif %}
+            {% endif %}
     </div>
 
 </div>
@@ -66,8 +72,76 @@
     const usuario = "{{ user.username }}" || "viewers";
     const correo = "{{ user.email }}" || "viewers";
 
+    
+
+    $(document).ready(function () {
+        // ...
+    
+        $('#desuscribir-btn').on('click', function () {
+            // Obtener el ID del usuario a desuscribir desde el atributo "data-usuario-desuscribir-id"
+            var usuarioDesuscribirId = $(this).data('usuario-desuscribir-id');
+    
+            // Realizar la solicitud AJAX para desuscribirse
+            $.ajax({
+                type: 'POST',
+                url: '/desuscripcion/',  // Reemplaza con la URL correcta
+                data: {
+                    desuscribir: usuarioDesuscribirId,
+                    csrfmiddlewaretoken: '{{ csrf_token }}'  // Asegúrate de incluir el token CSRF
+                },
+                dataType: 'json',
+                success: function (data) {
+                    // Manejar la respuesta si es necesario
+                    if (data.status === 'OK') {
+                        // Acciones después de una desuscripción exitosa
+                        console.log('Desuscripción exitosa');
+                    }
+                },
+                error: function (error) {
+                    console.log('Error en la solicitud AJAX:', error);
+                }
+            });
+        });
+    
+        // ...
+    });
+
+
+
+    $(document).ready(function () {
+        // ...
+    
+        $('#seguir-btn').on('click', function () {
+            // Obtener el ID del usuario a seguir desde el atributo "data-usuario-suscrito-id"
+            var usuarioSuscritoId = $(this).data('usuario-suscrito-id');
+    
+            // Realizar la solicitud AJAX
+            $.ajax({
+                type: 'POST',
+                url: '/suscripcion/',  // Reemplaza con la URL correcta
+                data: {
+                    seguir: usuarioSuscritoId,
+                    csrfmiddlewaretoken: '{{ csrf_token }}'  // Asegúrate de incluir el token CSRF
+                },
+                dataType: 'json',
+                success: function (data) {
+                    // Manejar la respuesta si es necesario
+                    if (data.status === 'OK') {
+                        // Acciones después de una suscripción exitosa
+                        console.log('Suscripción exitosa');
+                    }
+                },
+                error: function (error) {
+                    console.log('Error en la solicitud AJAX:', error);
+                }
+            });
+        });
+    
+        // ...
+    });
 
     function sendMessage() {
+        console.log('Botón clicado');
         var form = $('#enviar_mensaje');
         var url = form.attr('action');
     
@@ -126,7 +200,7 @@
 
 
     function updateChat() {
-        var salaId = {{ sala.id }};
+        var salaId = {{ sala_seleccionada.id }};
         var url = "/get_messages/" + salaId + "/";
     
         $.ajax({
@@ -152,19 +226,13 @@
     
                         // Agregar estilos si el mensaje está destacado
                         if (mensaje.destacado) {
-                            if (mensaje.sticker) {
-                                mensajeHTML += '<div class="mensaje-destacado" style="background-color: yellow;">' + mensajeHTML + '<img src="' + mensaje.sticker + '" alt="Sticker" style="max-width: 100%; max-height: 100%;">' + '</div>';
-                            }else{
-                                mensajeHTML += '<div class="mensaje-destacado" style="background-color: yellow;">' + mensajeHTML + '</div>';
-                            }
-                        }else{
-                            if (mensaje.sticker) {
-                                mensajeHTML += '<img src="' + mensaje.sticker + '" alt="Sticker" style="max-width: 100%; max-height: 100%;">';
-                            }
+                            mensajeHTML = '<div class="mensaje-destacado" style="background-color: yellow;">' + mensajeHTML + '</div>';
                         }
 
                         // Agregar la imagen del sticker si está presente
-                        
+                        if (mensaje.sticker) {
+                            mensajeHTML += '<img src="' + mensaje.sticker + '" alt="Sticker" style="max-width: 100%; max-height: 100%;">';
+                        }
     
                         mensajeHTML += '</p>';
                         
@@ -187,6 +255,8 @@
             }
         });
     }
+    
+    
     
     
     

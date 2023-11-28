@@ -17,4 +17,6 @@ urlpatterns = [
     path('get_messages/<int:sala_id>/', views.get_messages, name='get_messages'),
     path('logout/', LogoutView.as_view(), name='logout'),
     path('comprar_solespe/', views.comprar_solespe, name='comprar_solespe'),
+    path('suscripcion/', views.suscripcion, name='suscripcion'),
+    path('desuscripcion/', views.desuscripcion, name='desuscripcion'),
 ]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

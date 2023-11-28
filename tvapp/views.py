@@ -123,7 +123,7 @@ def sala_form(request):
         nombre_sala = request.POST.get('txtSala')
         
         if nombre_sala:
-            sala = Sala(nombreSala=nombre_sala, categoriaId=v_categoria)
+            sala = Sala(nombreSala=nombre_sala, categoriaId=v_categoria, creador=request.user)
             sala.save()
             sala_id = sala.id
             return redirect(f'/streamStramer/{sala_id}/')
@@ -132,25 +132,77 @@ def sala_form(request):
 
 
 def streamViewer(request, sala_id):
-    usuario_actual = request.user
+    usuario_actual = request.user 
     puntos_usuario = None
 
-    sala = get_object_or_404(Sala, id=sala_id)
-    mensajes = MensajeChat.objects.filter(sala=sala).order_by('timestamp')
-
     if usuario_actual.is_authenticated:
-        puntos_usuario, created = Puntos.objects.get_or_create(usuario=request.user)
-        
-        if request.method == 'GET':
-            sala = get_object_or_404(Sala, id=sala_id)
-            mensajes = MensajeChat.objects.filter(sala=sala).order_by('timestamp')
+        salas_del_usuario = Sala.objects.filter(creador=usuario_actual)
+        sala_seleccionada = get_object_or_404(Sala, id=sala_id)
 
-            data = [{'usuario': mensaje.usuario.username, 'mensaje': mensaje.mensaje, 'timestamp': str(mensaje.timestamp)} for mensaje in mensajes]
-        
-           
+        usuario_se_suscribio = SuscripcionUsuario.objects.filter(usuario=usuario_actual, usuario_suscrito=sala_seleccionada.creador.id)
+    else:
+        usuario_actual = 0
+        salas_del_usuario = Sala.objects.filter(creador=usuario_actual)
+        sala_seleccionada = get_object_or_404(Sala, id=sala_id)
 
-    return render(request, 'streamViewer.html', { 'sala': sala, 'mensajes': mensajes, 'puntos_usuario': puntos_usuario})
+        usuario_se_suscribio = SuscripcionUsuario.objects.filter(usuario=usuario_actual, usuario_suscrito=sala_seleccionada.creador.id)
+    
 
+    return render(request, 'streamViewer.html', {
+        'salas_del_usuario': salas_del_usuario,
+        'puntos_usuario': puntos_usuario,
+        'sala_seleccionada': sala_seleccionada,
+        'usuario_se_suscribio' : usuario_se_suscribio,
+    })
+
+def suscripcion(request):
+    usuario_actual = request.user
+
+    if request.method == 'POST':
+        # Lógica para permitir a usuarios suscribirse o desuscribirse de otros usuarios
+        usuario_suscrito_id = request.POST.get('seguir', None) or request.POST.get('desuscribir', None)
+
+        if usuario_suscrito_id:
+            usuario_suscrito = get_object_or_404(User, id=usuario_suscrito_id)
+
+            if 'seguir' in request.POST:
+                # Lógica para suscribirse
+                suscripcion, created = SuscripcionUsuario.objects.get_or_create(usuario=usuario_actual, usuario_suscrito=usuario_suscrito)
+                if created:
+                    return JsonResponse({'status': 'OK'})
+                else:
+                    return JsonResponse({'status': 'INFO', 'message': 'Ya estás suscrito'})
+            elif 'desuscribir' in request.POST:
+                # Lógica para desuscribirse
+                try:
+                    suscripcion = SuscripcionUsuario.objects.get(usuario=usuario_actual, usuario_suscrito=usuario_suscrito)
+                    suscripcion.delete()
+                    return JsonResponse({'status': 'OK'})
+                except SuscripcionUsuario.DoesNotExist:
+                    return JsonResponse({'status': 'INFO', 'message': 'No estás suscrito'})
+    
+    return JsonResponse({'status': 'ERROR', 'message': 'Petición no válida'})
+
+def desuscripcion(request):
+    usuario_actual = request.user
+    
+    if request.method == 'POST':
+        # Lógica para permitir a usuarios desuscribirse de otros usuarios
+        usuario_desuscribir_id = request.POST.get('desuscribir')
+        usuario_desuscribir = get_object_or_404(User, id=usuario_desuscribir_id)
+
+        # Intentar eliminar la suscripción existente
+        try:
+            suscripcion = SuscripcionUsuario.objects.get(usuario=usuario_actual, usuario_suscrito=usuario_desuscribir)
+            suscripcion.delete()
+            return JsonResponse({'status': 'OK'})
+        except SuscripcionUsuario.DoesNotExist:
+            # La suscripción no existe, indicar como INFO
+            return JsonResponse({'status': 'INFO'})
+
+    return JsonResponse({'status': 'ERROR'})
+
+    
 
 @csrf_exempt
 def enviar_mensaje(request, id):

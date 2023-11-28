@@ -15,13 +15,14 @@ class Categoria(models.Model):
         return txt.format(self.id_categoria , self.nombre_categoria)
     
 class Sala(models.Model):
+    creador = models.ForeignKey(User, on_delete=models.CASCADE)
     categoriaId = models.ForeignKey(Categoria, on_delete=models.CASCADE)
     id = models.AutoField(primary_key=True)
     nombreSala = models.CharField(max_length=100)
 
     def __str__(self):
-        txt = "id: {0}, nombresala: {1}"
-        return txt.format(self.id, self.nombreSala)
+        txt = "id: {0}, nombresala: {1}, Creador: {2},"
+        return txt.format(self.id, self.nombreSala, self.creador)
 
 
 class MensajeChat(models.Model):
@@ -38,7 +39,12 @@ class MensajeChat(models.Model):
         return txt.format(self.id, self.sala.nombreSala) 
 
     
+class SuscripcionUsuario(models.Model):
+    usuario = models.ForeignKey(User, related_name='usuario', on_delete=models.CASCADE)
+    usuario_suscrito = models.ForeignKey(User, related_name='usuario_suscrito', on_delete=models.CASCADE)
 
+    def __str__(self):
+        return f"Suscripción: {self.usuario.username} a Usuario: {self.usuario_suscrito.username}"
     
 
 class Puntos(models.Model):
