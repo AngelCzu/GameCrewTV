@@ -105,21 +105,28 @@ def editar_perfil(request):
 
 @login_required    
 def streamStramer(request, sala_id):
-    usuario_actual = request.user
+    usuario_actual = request.user 
     puntos_usuario = None
 
-    sala = get_object_or_404(Sala, id=sala_id)
-    mensajes = MensajeChat.objects.filter(sala=sala).order_by('timestamp')
-
     if usuario_actual.is_authenticated:
-        puntos_usuario, created = Puntos.objects.get_or_create(usuario=request.user)
-        
-        if request.method == 'GET':
-            sala = get_object_or_404(Sala, id=sala_id)
-            mensajes = MensajeChat.objects.filter(sala=sala).order_by('timestamp')
+        salas_del_usuario = Sala.objects.filter(creador=usuario_actual)
+        sala_seleccionada = get_object_or_404(Sala, id=sala_id)
 
-            data = [{'usuario': mensaje.usuario.username, 'mensaje': mensaje.mensaje, 'timestamp': str(mensaje.timestamp)} for mensaje in mensajes]
-    return render(request, 'streamStramer.html', { 'sala': sala, 'mensajes': mensajes, 'puntos_usuario': puntos_usuario})
+        usuario_se_suscribio = SuscripcionUsuario.objects.filter(usuario=usuario_actual, usuario_suscrito=sala_seleccionada.creador.id)
+    else:
+        usuario_actual = 0
+        salas_del_usuario = Sala.objects.filter(creador=usuario_actual)
+        sala_seleccionada = get_object_or_404(Sala, id=sala_id)
+
+        usuario_se_suscribio = SuscripcionUsuario.objects.filter(usuario=usuario_actual, usuario_suscrito=sala_seleccionada.creador.id)
+    
+
+    return render(request, 'streamViewer.html', {
+        'salas_del_usuario': salas_del_usuario,
+        'puntos_usuario': puntos_usuario,
+        'sala_seleccionada': sala_seleccionada,
+        'usuario_se_suscribio' : usuario_se_suscribio,
+    })
 
 def sala_form(request):
     categorias = Categoria.objects.all()
