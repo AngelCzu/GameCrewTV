@@ -18,6 +18,14 @@
         <p>{{ user.email }}</p>
         <p>Gaming Coins (GC): {{ puntos_usuario.puntos }}</p>
         <p>Solespe: {{ solespe_usuario.cantidadSolespe }}</p>
+
+        {% with contador=usuarios_suscritos|length %}
+        {% for usuario in usuarios_suscritos %}
+        
+        {% endfor %}
+            <p>Subscriptores: {{ contador }}</p>
+        {% endwith %}
+
     </div>
 </div>
 <div class="container mb-5">

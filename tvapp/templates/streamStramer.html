@@ -8,7 +8,7 @@
 
 {% block content %}
 <div data-email="{{ email }}" class="body">
-
+    
     <div class="container" id="meet">
         
     </div>
@@ -16,11 +16,15 @@
     <div class="container" id="chat-container">
         <div id="chat">
             {% for mensaje in mensajes %}
+            {% if mensaje.destacado %}
+                <p class="mensaje-destacado">{{ mensaje.usuario.username }} ({{ mensaje.timestamp|date:"H:i:s" }}): {{ mensaje.mensaje }}</p>
+            {% else %}
                 <p>{{ mensaje.usuario.username }} ({{ mensaje.timestamp|date:"H:i:s" }}): {{ mensaje.mensaje }}</p>
-            {% endfor %}
+            {% endif %}
+        {% endfor %}
         </div>
         
-        <form id="enviar_mensaje" action="/enviar_mensaje/{{sala.id}}" method="POST" enctype="multipart/form-data">
+        <form id="enviar_mensaje" action="/enviar_mensaje/{{sala_seleccionada.id}}" method="POST" enctype="multipart/form-data">
             {% csrf_token %}
             {% if user.is_authenticated %}
                 <input name="mensaje" type="text" id="input" placeholder="Escribe un mensaje...">
@@ -30,16 +34,26 @@
                 <br>
                 
                 <span class="puntos-container">Puntos: {{ puntos_usuario.puntos }}</span>
-                <button id="seguir-btn">Seguir</button>
+                
                 
                 <select id="sticker-dropdown">
                     <option value="" selected>Selecciona un Sticker</option>
-                    <option value="logo">Sticker 1</option>
-                    <option value="logo_transparent">Sticker 2</option>
+                    <option value="/static/img/ibai.jpg">ibai</option>
+                    <option value="/static/img/mrbeast.jpg">Mrbeast</option>
+                    <option value="/static/img/rakyz.jpg">rakyz</option>
+                    <option value="/static/img/logo.png">logo 1</option>
+                    <option value="/static/img/gamecrewtv-logo.png">logo 2</option>
+                    <option value="/static/img/logo_transparent.png">logo 3</option>
                     <!-- Agrega más opciones de stickers aquí -->
                 </select> 
-                {% endif %}
+                
             </form>
+                {% if usuario_se_suscribio %}
+                <button type="submit" name="desuscribir" data-usuario-desuscribir-id="{{ sala_seleccionada.creador.id }}" id="desuscribir-btn">Desuscribirse de {{ sala_seleccionada.creador }}</button>   
+                {% else %}
+                <button type="submit" name="seguir" data-usuario-suscrito-id="{{ sala_seleccionada.creador.id }}" id="seguir-btn">Seguir a {{ sala_seleccionada.creador }}</button>
+                {% endif %}
+            {% endif %}
     </div>
 
 </div>
@@ -58,45 +72,125 @@
     const usuario = "{{ user.username }}" || "viewers";
     const correo = "{{ user.email }}" || "viewers";
 
+    
+
+    $(document).ready(function () {
+        // ...
+    
+        $('#desuscribir-btn').on('click', function () {
+            // Obtener el ID del usuario a desuscribir desde el atributo "data-usuario-desuscribir-id"
+            var usuarioDesuscribirId = $(this).data('usuario-desuscribir-id');
+    
+            // Realizar la solicitud AJAX para desuscribirse
+            $.ajax({
+                type: 'POST',
+                url: '/desuscripcion/',  // Reemplaza con la URL correcta
+                data: {
+                    desuscribir: usuarioDesuscribirId,
+                    csrfmiddlewaretoken: '{{ csrf_token }}'  // Asegúrate de incluir el token CSRF
+                },
+                dataType: 'json',
+                success: function (data) {
+                    // Manejar la respuesta si es necesario
+                    if (data.status === 'OK') {
+                        // Acciones después de una desuscripción exitosa
+                        console.log('Desuscripción exitosa');
+                    }
+                },
+                error: function (error) {
+                    console.log('Error en la solicitud AJAX:', error);
+                }
+            });
+        });
+    
+        // ...
+    });
+
+
+
+    $(document).ready(function () {
+        // ...
+    
+        $('#seguir-btn').on('click', function () {
+            // Obtener el ID del usuario a seguir desde el atributo "data-usuario-suscrito-id"
+            var usuarioSuscritoId = $(this).data('usuario-suscrito-id');
+    
+            // Realizar la solicitud AJAX
+            $.ajax({
+                type: 'POST',
+                url: '/suscripcion/',  // Reemplaza con la URL correcta
+                data: {
+                    seguir: usuarioSuscritoId,
+                    csrfmiddlewaretoken: '{{ csrf_token }}'  // Asegúrate de incluir el token CSRF
+                },
+                dataType: 'json',
+                success: function (data) {
+                    // Manejar la respuesta si es necesario
+                    if (data.status === 'OK') {
+                        // Acciones después de una suscripción exitosa
+                        console.log('Suscripción exitosa');
+                    }
+                },
+                error: function (error) {
+                    console.log('Error en la solicitud AJAX:', error);
+                }
+            });
+        });
+    
+        // ...
+    });
 
     function sendMessage() {
+        console.log('Botón clicado');
         var form = $('#enviar_mensaje');
         var url = form.attr('action');
+    
+        // Obtener información adicional (destacado y sticker)
+        var destacado = $('#destacar').is(':checked');
+        var sticker = $('#sticker-dropdown').val();
+
+        
     
         $.ajax({
             type: 'POST',
             url: url,
-            data: form.serialize(),
+            data: {
+                mensaje: $('#input').val(),
+                destacado: destacado,
+                sticker: sticker
+            },
             dataType: 'json',
             success: function (data) {
                 if (data.status === 'OK') {
                     // Limpiar el input de mensaje después de enviar el mensaje
                     $('#input').val('');
     
-                    // Obtener el contenedor del chat
+                    // Desmarcar el checkbox
+                    $('#destacar').prop('checked', false);
+    
+                    // Actualizar el contenido del chat con el nuevo mensaje y sticker
                     var chatDiv = $('#chat');
+                    var mensajeHTML = '<p>' + data.usuario + ' (' +  data.timestamp  + '): ' + data.mensaje;
     
-                    // Crear el HTML del nuevo mensaje
-                    var mensajeHTML = '<p>' + data.mensaje.usuario + ' (' +  data.mensaje.timestamp  + '): ' + data.mensaje.mensaje + '</p>';
-    
-                    // Cambiar el color de fondo si el mensaje está destacado
-                    if (data.mensaje.destacado) {
-                        mensajeHTML = '<div class="destacado">' + mensajeHTML + '</div>';
+                    // Agregar estilos si el mensaje está destacado
+                    if (data.destacado) {
+                        mensajeHTML = '<div class="mensaje-destacado">' + mensajeHTML + '</div>';
                     }
     
-                    // Mostrar el sticker si está presente
-                    if (data.mensaje.sticker) {
-                        mensajeHTML += '<img src="{% static 'sticker/' %}' + data.mensaje.sticker + '.png" alt="sticker">';
+                    // Agregar la imagen del sticker si está presente
+                    if (data.sticker) {
+                        mensajeHTML += '<img src="' + data.sticker + '" alt="Sticker">';
                     }
     
-                    // Agregar el nuevo mensaje al chat sin eliminar los antiguos
+                    mensajeHTML += '</p>';
+    
                     chatDiv.append(mensajeHTML);
                 } else {
-                    console.log('Error al enviar mensaje: ' + data.message);
+                    console.log('Error al enviar mensaje:', data.message);
                 }
             },
-            error: function (error) {
-                console.log('Error al enviar mensaje: ' + error);
+            error: function (xhr, status, error) {
+                console.log('Error al enviar mensaje:', error);
             }
         });
     
@@ -104,42 +198,67 @@
         return false;
     }
 
+
     function updateChat() {
-    var salaId = {{ sala.id }};
-    var url = "/get_messages/" + salaId + "/";
+        var salaId = {{ sala_seleccionada.id }};
+        var url = "/get_messages/" + salaId + "/";
+    
+        $.ajax({
+            url: url,
+            type: 'GET',
+            dataType: 'json',
+            success: function (data) {
+                var chatDiv = $('#chat');
+    
+                // Verificar si data y data.mensajes están definidos
+                if (data && data.mensajes) {
+                    // Construir el HTML de los mensajes
 
-    $.ajax({
-        url: url,
-        type: 'GET',
-        dataType: 'json',
-        success: function (data) {
-            var chatDiv = $('#chat');
-            chatDiv.empty(); // Limpiar el contenido actual del chat
+                    
+                    var mensajesHTML = '';
+    
+                    data.mensajes.forEach(function (mensaje) {
+                        // Obtener la hora actual en formato HH:MM:SS
+                        var hora = new Date(mensaje.timestamp).toLocaleTimeString();
+    
+                        // Crear el HTML del mensaje con la hora
+                        var mensajeHTML = '<p>' + mensaje.usuario + ' (' +  hora  + '): ' + mensaje.mensaje;
+    
+                        // Agregar estilos si el mensaje está destacado
+                        if (mensaje.destacado) {
+                            mensajeHTML = '<div class="mensaje-destacado" style="background-color: yellow;">' + mensajeHTML + '</div>';
+                        }
 
-            // Verificar si data y data.mensajes están definidos
-            if (data && data.mensajes) {
-                // Agregar los nuevos mensajes al chat
-                data.mensajes.forEach(function (mensaje) {
-                    // Obtener la hora actual en formato HH:MM:SS
-                    var hora = new Date(mensaje.timestamp).toLocaleTimeString();
-
-                    // Crear el HTML del mensaje con la hora
-                    var mensajeHTML = '<p>' + mensaje.usuario + ' (' +  hora  + '): ' + mensaje.mensaje + '</p>';
-                    chatDiv.append(mensajeHTML);
-                });
-            } else {
-                console.log('Datos de mensajes no válidos:', data);
+                        // Agregar la imagen del sticker si está presente
+                        if (mensaje.sticker) {
+                            mensajeHTML += '<img src="' + mensaje.sticker + '" alt="Sticker" style="max-width: 100%; max-height: 100%;">';
+                        }
+    
+                        mensajeHTML += '</p>';
+                        
+                        // Agregar el mensaje al HTML acumulado
+                        mensajesHTML += mensajeHTML;
+                    });
+    
+                    // Reemplazar el contenido actual del chat con los nuevos mensajes
+                    chatDiv.html(mensajesHTML);
+                } else {
+                    console.log('Datos de mensajes no válidos:', data);
+                }
+            },
+            error: function (error) {
+                console.log('Error al obtener mensajes: ' + error);
+            },
+            complete: function () {
+                // Establecer un temporizador para la próxima actualización después de 1000 ms (1 segundo)
+                setTimeout(updateChat, 1000);
             }
-        },
-        error: function (error) {
-            console.log('Error al obtener mensajes: ' + error);
-        },
-        complete: function () {
-            // Establecer un temporizador para la próxima actualización después de 1000 ms (1 segundo)
-            setTimeout(updateChat, 1000);
-        }
-    });
-}
+        });
+    }
+    
+    
+    
+    
     
     // Llama a la función inicialmente para iniciar el proceso de actualización
     updateChat();

@@ -66,6 +66,7 @@ def login_registro(request):
     
 @login_required
 def perfil(request):
+    usuario_actual = request.user
     if request.method == 'POST' and 'logout' in request.POST:
         # Si se envía una solicitud POST con el nombre 'logout', entonces realiza el logout.
         logout(request)
@@ -76,7 +77,13 @@ def perfil(request):
     email = usuario_actual.email
     puntos_usuario = Puntos.objects.get(usuario=request.user)
     solespe_usuario, creado = Solespe.objects.get_or_create(usuario=request.user)
-    return render(request, 'perfil.html', {'puntos_usuario': puntos_usuario, 'solespe_usuario': solespe_usuario})
+    
+    
+    usuarios_suscritos = SuscripcionUsuario.objects.filter(usuario_suscrito=request.user)
+    
+    return render(request, 'perfil.html', {'puntos_usuario': puntos_usuario, 
+                                           'solespe_usuario': solespe_usuario,
+                                           'usuarios_suscritos' : usuarios_suscritos})
 
 @login_required
 def editar_perfil(request):
