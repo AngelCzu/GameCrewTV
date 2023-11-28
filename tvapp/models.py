@@ -29,7 +29,8 @@ class MensajeChat(models.Model):
     sala = models.ForeignKey('Sala', on_delete=models.CASCADE)
     mensaje = models.TextField()
     destacado = models.BooleanField(default=False)
-    sticker = models.CharField(max_length=50, blank=True, null=True)
+    destacado = models.BooleanField(default=False)  # Nuevo campo
+    sticker = models.CharField(max_length=100, blank=True, null=True)
     timestamp = models.DateTimeField(auto_now_add=True)
     
     def __str__(self):

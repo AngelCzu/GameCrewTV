@@ -11,6 +11,7 @@ from django.core.mail import send_mail
 from django.conf import settings 
 from .forms import CompraSolespeForm
 from django.contrib import messages
+from django.views.decorators.csrf import csrf_exempt
 import threading
 
 def agregar_puntos(usuario, cantidad):
@@ -150,34 +151,34 @@ def streamViewer(request, sala_id):
 
     return render(request, 'streamViewer.html', { 'sala': sala, 'mensajes': mensajes, 'puntos_usuario': puntos_usuario})
 
-from django.http import JsonResponse
 
+@csrf_exempt
 def enviar_mensaje(request, id):
     try:
-        v_mensaje = request.POST.get('mensaje', '')
-        destacar = request.POST.get('destacar', False)
-        sticker = request.POST.get('sticker', None)
+        v_mensaje = request.POST['mensaje']
         usuario = request.user
 
         if id and v_mensaje:
             sala = get_object_or_404(Sala, id=id)
+
+            # Obtener información adicional (destacado y sticker)
+            destacado = request.POST.get('destacado', 'false').lower() == 'true'
+            sticker = request.POST.get('sticker', None)
+
+            # Crear el mensaje con la información adicional
             mensaje = MensajeChat.objects.create(
                 usuario=usuario,
                 sala=sala,
                 mensaje=v_mensaje,
-                destacado=destacar,
-                sticker=sticker
+                destacado=destacado,
+                sticker=sticker,
             )
 
             return JsonResponse({
                 'status': 'OK',
-                'mensaje': {
-                    'usuario': mensaje.usuario.username,
-                    'mensaje': mensaje.mensaje,
-                    'timestamp': str(mensaje.timestamp),
-                    'destacado': mensaje.destacado,
-                    'sticker': mensaje.sticker,
-                }
+                'mensaje_id': mensaje.id,
+                'destacado': destacado,
+                'sticker': sticker,
             })
         else:
             return JsonResponse({'status': 'ERROR', 'message': 'Datos insuficientes'})
@@ -185,13 +186,21 @@ def enviar_mensaje(request, id):
     except Exception as e:
         return JsonResponse({'status': 'ERROR', 'message': str(e)})
 
-    
 
 def get_messages(request, sala_id):
     sala = get_object_or_404(Sala, id=sala_id)
     mensajes = MensajeChat.objects.filter(sala=sala).order_by('timestamp')
     
-    data = [{'usuario': mensaje.usuario.username, 'mensaje': mensaje.mensaje, 'timestamp': str(mensaje.timestamp)} for mensaje in mensajes]
+    data = [
+        {
+            'usuario': mensaje.usuario.username,
+            'mensaje': mensaje.mensaje,
+            'timestamp': str(mensaje.timestamp),
+            'destacado': mensaje.destacado,
+            'sticker': mensaje.sticker
+        }
+        for mensaje in mensajes
+    ]
     
     return JsonResponse({'mensajes': data})
 
