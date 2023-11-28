@@ -26,20 +26,21 @@
                 <input name="mensaje" type="text" id="input" placeholder="Escribe un mensaje...">
                 <p> </p>
                 <button type="button" onclick="sendMessage()">Enviar</button>
-                <input type="checkbox" id="destacar"> Destacar mensaje
+                <input type="checkbox" name="destacar" id="destacar"> Destacar mensaje
                 <br>
                 
                 <span class="puntos-container">Puntos: {{ puntos_usuario.puntos }}</span>
                 <button id="seguir-btn">Seguir</button>
                 
-                <select id="sticker-dropdown">
+                <select name="sticker" id="sticker-dropdown">
                     <option value="" selected>Selecciona un Sticker</option>
                     <option value="logo">Sticker 1</option>
                     <option value="logo_transparent">Sticker 2</option>
                     <!-- Agrega más opciones de stickers aquí -->
                 </select> 
-                {% endif %}
-            </form>
+            {% endif %}
+        </form>
+        
     </div>
 
 </div>
@@ -62,7 +63,7 @@
     function sendMessage() {
         var form = $('#enviar_mensaje');
         var url = form.attr('action');
-
+    
         $.ajax({
             type: 'POST',
             url: url,
@@ -72,14 +73,22 @@
                 if (data.status === 'OK') {
                     // Limpiar el input de mensaje después de enviar el mensaje
                     $('#input').val('');
-
+    
                     // Actualizar el contenido del chat con los mensajes recibidos
                     var chatDiv = $('#chat');
-                    chatDiv.empty();
-                    data.mensajes.forEach(function (mensaje) {
-                        var mensajeHTML = '<p>' + mensaje.usuario + ' (' +  mensaje.timestamp  + '): ' + mensaje.mensaje + '</p>';
-                        chatDiv.append(mensajeHTML);
-                    });
+                    var mensajeHTML = '<p>' + data.mensaje.usuario + ' (' +  data.mensaje.timestamp  + '): ' + data.mensaje.mensaje + '</p>';
+                    
+                    // Cambiar el color de fondo si el mensaje está destacado
+                    if (data.mensaje.destacado) {
+                        mensajeHTML = '<div class="destacado">' + mensajeHTML + '</div>';
+                    }
+                    
+                    // Mostrar el sticker si está presente
+                    if (data.mensaje.sticker) {
+                        mensajeHTML += '<img src="{% static 'sticker/' %}' + data.mensaje.sticker + '.png" alt="sticker">';
+                    }
+    
+                    chatDiv.append(mensajeHTML);
                 } else {
                     console.log('Error al enviar mensaje: ' + data.message);
                 }
@@ -88,14 +97,21 @@
                 console.log('Error al enviar mensaje: ' + error);
             }
         });
-
+    
         // Evitar que el formulario se envíe normalmente
         return false;
     }
+    
+    // Resto del código para la actualización del chat...
+    
+    
+    // Resto del código para la actualización del chat...
+    
 
     function updateChat() {
     var salaId = {{ sala.id }};
     var url = "/get_messages/" + salaId + "/";
+    
 
     $.ajax({
         url: url,
@@ -113,7 +129,25 @@
                     var hora = new Date(mensaje.timestamp).toLocaleTimeString();
 
                     // Crear el HTML del mensaje con la hora
-                    var mensajeHTML = '<p>' + mensaje.usuario + ' (' +  hora  + '): ' + mensaje.mensaje + '</p>';
+                    var mensajeHTML = '<p>';
+
+                    // Mostrar el nombre de usuario
+                    mensajeHTML += '<span class="usuario">' + mensaje.usuario + '</span>';
+
+                    // Mostrar el mensaje
+                    mensajeHTML += ' (' + hora + '): ' + mensaje.mensaje;
+
+                    // Resaltar si el mensaje está destacado
+                    if (mensaje.destacado) {
+                        mensajeHTML = '<div class="destacado">' + mensajeHTML + '</div>';
+                    }
+
+                    // Mostrar el sticker si está presente
+                    if (mensaje.sticker) {
+                        mensajeHTML += '<img src="{% static 'sticker/' %}' + mensaje.sticker + '.png" alt="sticker">';
+                    }
+
+                    mensajeHTML += '</p>';
                     chatDiv.append(mensajeHTML);
                 });
             } else {
@@ -129,9 +163,7 @@
         }
     });
 }
-    
-    // Llama a la función inicialmente para iniciar el proceso de actualización
-    updateChat();
+
 
 
     const nombreSala = localStorage.getItem('nombreSalaSeleccionada') || [];

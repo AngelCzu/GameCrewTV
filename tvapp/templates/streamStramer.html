@@ -62,7 +62,7 @@
     function sendMessage() {
         var form = $('#enviar_mensaje');
         var url = form.attr('action');
-
+    
         $.ajax({
             type: 'POST',
             url: url,
@@ -72,14 +72,25 @@
                 if (data.status === 'OK') {
                     // Limpiar el input de mensaje después de enviar el mensaje
                     $('#input').val('');
-
-                    // Actualizar el contenido del chat con los mensajes recibidos
+    
+                    // Obtener el contenedor del chat
                     var chatDiv = $('#chat');
-                    chatDiv.empty();
-                    data.mensajes.forEach(function (mensaje) {
-                        var mensajeHTML = '<p>' + mensaje.usuario + ' (' +  mensaje.timestamp  + '): ' + mensaje.mensaje + '</p>';
-                        chatDiv.append(mensajeHTML);
-                    });
+    
+                    // Crear el HTML del nuevo mensaje
+                    var mensajeHTML = '<p>' + data.mensaje.usuario + ' (' +  data.mensaje.timestamp  + '): ' + data.mensaje.mensaje + '</p>';
+    
+                    // Cambiar el color de fondo si el mensaje está destacado
+                    if (data.mensaje.destacado) {
+                        mensajeHTML = '<div class="destacado">' + mensajeHTML + '</div>';
+                    }
+    
+                    // Mostrar el sticker si está presente
+                    if (data.mensaje.sticker) {
+                        mensajeHTML += '<img src="{% static 'sticker/' %}' + data.mensaje.sticker + '.png" alt="sticker">';
+                    }
+    
+                    // Agregar el nuevo mensaje al chat sin eliminar los antiguos
+                    chatDiv.append(mensajeHTML);
                 } else {
                     console.log('Error al enviar mensaje: ' + data.message);
                 }
@@ -88,7 +99,7 @@
                 console.log('Error al enviar mensaje: ' + error);
             }
         });
-
+    
         // Evitar que el formulario se envíe normalmente
         return false;
     }

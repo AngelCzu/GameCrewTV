@@ -150,21 +150,41 @@ def streamViewer(request, sala_id):
 
     return render(request, 'streamViewer.html', { 'sala': sala, 'mensajes': mensajes, 'puntos_usuario': puntos_usuario})
 
-def enviar_mensaje(request,id):
-    v_mensaje = request.POST['mensaje']
-    usuario = request.user
+from django.http import JsonResponse
 
-    if id and v_mensaje:
-        sala = get_object_or_404(Sala, id=id)
-        MensajeChat.objects.create(
-            usuario=usuario,
-            sala=sala,
-            mensaje=v_mensaje
-        )
+def enviar_mensaje(request, id):
+    try:
+        v_mensaje = request.POST.get('mensaje', '')
+        destacar = request.POST.get('destacar', False)
+        sticker = request.POST.get('sticker', None)
+        usuario = request.user
 
-        return JsonResponse({'status': 'OK'})
-    else:
-        return JsonResponse({'status': 'ERROR', 'message': 'Datos insuficientes'})
+        if id and v_mensaje:
+            sala = get_object_or_404(Sala, id=id)
+            mensaje = MensajeChat.objects.create(
+                usuario=usuario,
+                sala=sala,
+                mensaje=v_mensaje,
+                destacado=destacar,
+                sticker=sticker
+            )
+
+            return JsonResponse({
+                'status': 'OK',
+                'mensaje': {
+                    'usuario': mensaje.usuario.username,
+                    'mensaje': mensaje.mensaje,
+                    'timestamp': str(mensaje.timestamp),
+                    'destacado': mensaje.destacado,
+                    'sticker': mensaje.sticker,
+                }
+            })
+        else:
+            return JsonResponse({'status': 'ERROR', 'message': 'Datos insuficientes'})
+
+    except Exception as e:
+        return JsonResponse({'status': 'ERROR', 'message': str(e)})
+
     
 
 def get_messages(request, sala_id):

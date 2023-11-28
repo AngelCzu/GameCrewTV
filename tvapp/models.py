@@ -28,11 +28,14 @@ class MensajeChat(models.Model):
     usuario = models.ForeignKey(User, on_delete=models.CASCADE)
     sala = models.ForeignKey('Sala', on_delete=models.CASCADE)
     mensaje = models.TextField()
+    destacado = models.BooleanField(default=False)
+    sticker = models.CharField(max_length=50, blank=True, null=True)
     timestamp = models.DateTimeField(auto_now_add=True)
-
+    
     def __str__(self):
         txt = "ID_Sala: {0}, Nombre_Sala: {1}"
         return txt.format(self.id, self.sala.nombreSala) 
+
     
 
     

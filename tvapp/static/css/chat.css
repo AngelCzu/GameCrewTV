@@ -67,3 +67,8 @@ img{
     width: 92%; /* Ancho del campo de entrada de texto (ajústalo según sea necesario) */
     padding: 5px;
 }
+
+.destacado {
+    background-color: yellow;
+    display: inline-block;
+}
